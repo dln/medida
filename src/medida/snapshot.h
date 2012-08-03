@@ -15,7 +15,6 @@ public:
   Snapshot();
   Snapshot(std::vector<double> values);
   Snapshot(std::vector<long> values);
-
   ~Snapshot();
   std::size_t size() const;
   double getValue(double quantile) const;
@@ -25,20 +24,16 @@ public:
   double get98thPercentile() const;
   double get99thPercentile() const;
   double get999thPercentile() const;
-
   std::vector<double> getValues() const;
-
   // void dump(File output); 
 protected:
   std::vector<double> values;
-
   static const double kMEDIAN_Q;
   static const double kP75_Q;
   static const double kP95_Q;
   static const double kP98_Q;
   static const double kP99_Q;
   static const double kP999_Q;
-
 };
 
 }

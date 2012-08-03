@@ -25,8 +25,8 @@ find_package(Threads REQUIRED)
 
 set(medida_SOURCES
   src/medida/counter.cc
-  src/medida/sample.cc
   src/medida/snapshot.cc
+  src/medida/uniform_sample.cc
 )
 
 set(medida_HEADERS
@@ -34,6 +34,7 @@ set(medida_HEADERS
   src/medida/counter.h
   src/medida/sample.h
   src/medida/snapshot.h
+  src/medida/uniform_sample.h
 )
 
 include_directories(

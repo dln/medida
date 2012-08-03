@@ -2,10 +2,11 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#ifndef MEDIDA_METRICS_SAMPLE_H_
-#define MEDIDA_METRICS_SAMPLE_H_
+#ifndef MEDIDA_SAMPLE_H_
+#define MEDIDA_SAMPLE_H_
 
 #include <cstddef>
+#include <cstdint>
 
 #include "medida/snapshot.h"
 
@@ -13,15 +14,13 @@ namespace medida {
 
 class Sample {
 public:
-  Sample();
-  ~Sample();
+  virtual ~Sample() {};
   virtual void clear() = 0;
-  virtual std::size_t size() const = 0;
-  virtual void update(long value) = 0;
-  virtual Snapshot getSnapshot() = 0;
-protected:
+  virtual std::uint64_t size() const = 0;
+  virtual void update(std::int64_t value) = 0;
+  virtual Snapshot getSnapshot() const = 0;
 };
 
-}
+} // namespace medida
 
-#endif // MEDIDA_METRICS_SAMPLE_H_
+#endif // MEDIDA_SAMPLE_H_

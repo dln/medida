@@ -5,6 +5,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 set(test_sources
   test_counter.cc
   test_snapshot.cc
+  test_uniform_sample.cc
 )
 
 add_executable(test-medida ${test_sources})
