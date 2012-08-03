@@ -14,29 +14,30 @@ class Snapshot {
 public:
   Snapshot();
   Snapshot(std::vector<double> values);
-  // Snapshot(Collection<Long> values) {
+  Snapshot(std::vector<long> values);
+
   ~Snapshot();
-  std::size_t size() const { return values.size(); };
+  std::size_t size() const;
   double getValue(double quantile) const;
-  double getMedian() const { return getValue(kMEDIAN_Q); };
-  double get75thPercentile() const { return getValue(kP75_Q); };
-  double get95thPercentile() const { return getValue(kP95_Q); };
-  double get98thPercentile() const { return getValue(kP98_Q); };
-  double get99thPercentile() const { return getValue(kP99_Q); };
-  double get999thPercentile() const { return getValue(kP999_Q); };
+  double getMedian() const;
+  double get75thPercentile() const;
+  double get95thPercentile() const;
+  double get98thPercentile() const;
+  double get99thPercentile() const;
+  double get999thPercentile() const;
 
   std::vector<double> getValues() const;
 
   // void dump(File output); 
-  static constexpr double kMEDIAN_Q = 0.5f;
-  static constexpr double kP75_Q = 0.75f;
-  static constexpr double kP95_Q = 0.95f;
-  static constexpr double kP98_Q = 0.98f;
-  static constexpr double kP99_Q = 0.99f;
-  static constexpr double kP999_Q = 0.999f;
-
 protected:
   std::vector<double> values;
+
+  static const double kMEDIAN_Q;
+  static const double kP75_Q;
+  static const double kP95_Q;
+  static const double kP98_Q;
+  static const double kP99_Q;
+  static const double kP999_Q;
 
 };
 
