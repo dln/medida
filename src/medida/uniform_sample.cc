@@ -55,7 +55,7 @@ Snapshot UniformSample::getSnapshot() const {
   std::vector<std::int64_t> copy;
   for (std::uint32_t i = 0; i < size_; ++i) {
     auto val = values_[i].load();
-    copy.push_back(values_[i].load());
+    copy.push_back(val);
   }
   return Snapshot(copy);
 }
