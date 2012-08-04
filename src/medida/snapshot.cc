@@ -12,14 +12,6 @@
 
 namespace medida {
 
-  // FIXME: GCC 4.4 doesn't support constexpr, so go old-school for now.
-  const double Snapshot::kMEDIAN_Q = 0.5f;
-  const double Snapshot::kP75_Q = 0.75f;
-  const double Snapshot::kP95_Q = 0.95f;
-  const double Snapshot::kP98_Q = 0.98f;
-  const double Snapshot::kP99_Q = 0.99f;
-  const double Snapshot::kP999_Q = 0.999f;
-
   Snapshot::Snapshot() {
   }
 

@@ -28,12 +28,12 @@ public:
   // void dump(File output); 
 protected:
   std::vector<double> values;
-  static const double kMEDIAN_Q;
-  static const double kP75_Q;
-  static const double kP95_Q;
-  static const double kP98_Q;
-  static const double kP99_Q;
-  static const double kP999_Q;
+  static const double kMEDIAN_Q = 0.5;
+  static const double kP75_Q = 0.75;
+  static const double kP95_Q = 0.95;
+  static const double kP98_Q = 0.98;
+  static const double kP99_Q = 0.99;
+  static const double kP999_Q = 0.999;
 };
 
 }
