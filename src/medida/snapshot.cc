@@ -13,17 +13,22 @@
 namespace medida {
 
   Snapshot::Snapshot() {
+    Init();
   }
 
   Snapshot::Snapshot(std::vector<double> values) : values_(values) {
-    std::sort(this->values_.begin(), this->values_.end());
+    Init();
   }
 
   Snapshot::Snapshot(std::vector<long> values) : values_(values.begin(), values.end()) {
-    std::sort(this->values_.begin(), this->values_.end());
+    Init();
   }
 
   Snapshot::~Snapshot() {
+  }
+
+  void Snapshot::Init() {
+    std::sort(this->values_.begin(), this->values_.end());
   }
 
   std::size_t Snapshot::size() const {
