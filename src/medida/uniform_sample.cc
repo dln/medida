@@ -8,15 +8,16 @@
 #include <cstdatomic>  // GCC 4.4
 #include <cstdint>
 #include <vector>
+#include <algorithm>
 #include <array>
 #include <iostream>
 
 namespace medida {
 
 UniformSample::UniformSample(std::uint32_t reservoirSize)
-    : size_(reservoirSize),
-      count_(1),
-      values_(new std::atomic<std::int64_t>[reservoirSize]) {
+    : size_ {reservoirSize},
+      count_ {1},
+      values_ {new std::atomic<std::int64_t>[reservoirSize]} {
   clear();
 }
 
@@ -25,7 +26,7 @@ UniformSample::~UniformSample() {
 }
 
 void UniformSample::clear() {
-  for (std::uint32_t i = 0; i < size_; ++i) {
+  for (auto i = 0; i < size_; ++i) {
     values_[i].store(0);
   }
   count_.store(1);
@@ -53,11 +54,11 @@ void UniformSample::update(std::int64_t value) {
 
 Snapshot UniformSample::getSnapshot() const {
   std::vector<std::int64_t> copy;
-  for (std::uint32_t i = 0; i < size_; ++i) {
-    auto val = values_[i].load();
-    copy.push_back(val);
+  copy.reserve(size_);
+  for (auto i = 0; i < size_; ++i) {
+    copy.push_back(values_[i].load());
   }
-  return Snapshot(copy);
+  return {copy};
 }
 
 std::int64_t UniformSample::nextLong(std::int64_t n) const {
@@ -69,6 +70,5 @@ std::int64_t UniformSample::nextLong(std::int64_t n) const {
   } while (bits - val + (n - 1) < 0L);
   return val;
 }
-
 
 }

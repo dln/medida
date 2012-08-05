@@ -13,7 +13,7 @@ using namespace medida;
 
 class SnapshotTest : public ::testing::Test {
 protected:
-  SnapshotTest() : values({5, 1, 2, 3, 4}), snapshot(values) {
+  SnapshotTest() : values {5, 1, 2, 3, 4}, snapshot {values} {
   };
 
   const std::vector<double> values;
@@ -53,7 +53,7 @@ TEST_F(SnapshotTest, hasAp999) {
 }
 
 TEST_F(SnapshotTest, hasValues) {
-  auto ref = {1.0, 2.0, 3.0, 4.0, 5.0};
+  auto ref {1.0, 2.0, 3.0, 4.0, 5.0};
   EXPECT_TRUE(std::equal(ref.begin(), ref.end(), snapshot.getValues().begin()));
 }
 
@@ -62,8 +62,8 @@ TEST_F(SnapshotTest, hasASize) {
 }
 
 TEST_F(SnapshotTest, canAlsoBeCreatedFromACollectionOfLongs) {
-  auto ref_long = {5L, 1L, 2L, 4L, 3L};
-  auto ref_doubles = {1.0, 2.0, 3.0, 4.0, 5.0};
-  auto snap = Snapshot(ref_long);
+  auto ref_long {5L, 1L, 2L, 4L, 3L};
+  auto ref_doubles {1.0, 2.0, 3.0, 4.0, 5.0};
+  Snapshot snap {ref_long};
   EXPECT_TRUE(std::equal(ref_doubles.begin(), ref_doubles.end(), snap.getValues().begin()));
 }

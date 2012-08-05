@@ -15,23 +15,23 @@ namespace medida {
   Snapshot::Snapshot() {
   }
 
-  Snapshot::Snapshot(std::vector<double> values) : values(values) {
-    std::sort(this->values.begin(), this->values.end());
+  Snapshot::Snapshot(std::vector<double> values) : values_(values) {
+    std::sort(this->values_.begin(), this->values_.end());
   }
 
-  Snapshot::Snapshot(std::vector<long> values) : values(values.begin(), values.end()) {
-    std::sort(this->values.begin(), this->values.end());
+  Snapshot::Snapshot(std::vector<long> values) : values_(values.begin(), values.end()) {
+    std::sort(this->values_.begin(), this->values_.end());
   }
 
   Snapshot::~Snapshot() {
   }
 
   std::size_t Snapshot::size() const {
-   return values.size();
+   return values_.size();
   }
 
   std::vector<double> Snapshot::getValues() const {
-    return values;
+    return values_;
   }
 
   double Snapshot::getValue(double quantile) const {
@@ -39,22 +39,22 @@ namespace medida {
       throw std::invalid_argument("quantile is not in [0..1]");
     }
 
-    if (values.empty()) {
+    if (values_.empty()) {
       return 0.0;
     }
 
-    const double pos = quantile * (values.size() + 1);
+    auto pos = quantile * (values_.size() + 1);
 
     if (pos < 1) {
-      return values.front();
+      return values_.front();
     }
 
-    if (pos >= values.size()) {
-      return values.back();
+    if (pos >= values_.size()) {
+      return values_.back();
     }
 
-    const double lower = values.at(pos - 1);
-    const double upper = values.at(pos);
+    auto lower = values_.at(pos - 1);
+    auto upper = values_.at(pos);
     return lower + (pos - std::floor(pos)) * (upper - lower);
 
   }

@@ -27,7 +27,7 @@ public:
   std::vector<double> getValues() const;
   // void dump(File output); 
 protected:
-  std::vector<double> values;
+  std::vector<double> values_;
   static const double kMEDIAN_Q = 0.5;
   static const double kP75_Q = 0.75;
   static const double kP95_Q = 0.95;

@@ -23,7 +23,7 @@ public:
   static EWMA fifteenMinuteEWMA();
   void update(std::int64_t n);
   void tick();
-  double getRate(std::chrono::nanoseconds duration = std::chrono::seconds(1)) const;
+  double getRate(std::chrono::nanoseconds duration = std::chrono::seconds {1}) const;
 protected:
   static const int kINTERVAL = 5;
   static const double kSECONDS_PER_MINUTE = 60.0;
