@@ -59,7 +59,7 @@ namespace medida {
     }
   }
 
-  double EWMA::getRatePerSecond() const {
-    return rate_ * std::chrono::nanoseconds::period::den;
+  double EWMA::getRate(std::chrono::nanoseconds duration) const {
+    return rate_ * duration.count();
   }
 }
