@@ -32,7 +32,7 @@ protected:
     std::chrono::high_resolution_clock::time_point startTime_;
     std::atomic<std::uint64_t> nextScaleTime_;
     std::atomic<std::uint64_t> count_;
-    std::map<double, uint64_t> values_;
+    std::map<double, int64_t> values_;
     std::mutex values_mutex_;
     std::mutex read_mutex_;
     std::mutex write_mutex_;
