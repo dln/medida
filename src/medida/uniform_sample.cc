@@ -22,7 +22,6 @@ UniformSample::UniformSample(std::uint32_t reservoirSize)
 }
 
 UniformSample::~UniformSample() {
-  delete[] values_;
 }
 
 void UniformSample::clear() {
