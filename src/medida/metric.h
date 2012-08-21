@@ -5,18 +5,11 @@
 #ifndef MEDIDA_METRIC_H_
 #define MEDIDA_METRIC_H_
 
-#include <chrono>
-
-
 namespace medida {
 
 class Metric {
 public:
-  Metric();
-  ~Metric();
-
-    // <T> void processWith(MetricProcessor<T> processor, MetricName name, T context) throws Exception;
-  // virtual void processWith(MetricProcessor processor, MetricName name, T context);
+  virtual ~Metric() = 0;
 };
 
 } // namespace medida

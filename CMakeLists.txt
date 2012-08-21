@@ -27,6 +27,7 @@ set(medida_SOURCES
   src/medida/counter.cc
   src/medida/ewma.cc
   src/medida/exp_decay_sample.cc
+  src/medida/metric.cc
   src/medida/metric_name.cc
   src/medida/snapshot.cc
   src/medida/uniform_sample.cc
@@ -37,6 +38,7 @@ set(medida_HEADERS
   src/medida/counter.h
   src/medida/ewma.h
   src/medida/exp_decay_sample.h
+  src/medida/metric.h
   src/medida/metric_name.h
   src/medida/sample.h
   src/medida/snapshot.h
