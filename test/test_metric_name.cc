@@ -13,32 +13,35 @@ using namespace medida;
 
 class MetricNameTest : public ::testing::Test {
 protected:
-  MetricNameTest() : name {"group", "type", "name", "scope", "bean"} {
+  MetricNameTest() : name {"domain", "type", "name", "scope"} {
   };
 
   MetricName name;
 };
 
-TEST_F(MetricNameTest, hasAGroup) {
-  EXPECT_EQ(name.getGroup(), "group");
+TEST_F(MetricNameTest, hasADomain) {
+  EXPECT_EQ(name.domain(), "domain");
 }
 
 TEST_F(MetricNameTest, hasAType) {
-  EXPECT_EQ(name.getType(), "type");
+  EXPECT_EQ(name.type(), "type");
 }
 
 TEST_F(MetricNameTest, hasAName) {
-  EXPECT_EQ(name.getName(), "name");
+  EXPECT_EQ(name.name(), "name");
 }
 
 TEST_F(MetricNameTest, hasAScope) {
-  EXPECT_EQ(name.getScope(), "scope");
-}
-
-TEST_F(MetricNameTest, hasABean) {
-  EXPECT_EQ(name.getBean(), "bean");
+  EXPECT_EQ(name.scope(), "scope");
+  EXPECT_TRUE(name.has_scope());
 }
 
 TEST_F(MetricNameTest, isHumanReadable) {
-  EXPECT_EQ(name.toString(), "bean");
+  EXPECT_EQ(name.ToString(), "domain.type.name.scope");
+}
+
+TEST_F(MetricNameTest, hasAWorkingEqualsImplementation) {
+  EXPECT_EQ(name, name);
+  EXPECT_EQ(name, MetricName("domain", "type", "name", "scope"));
+  EXPECT_NE(name, MetricName("domain", "type", "name"));
 }

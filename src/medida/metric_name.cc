@@ -5,57 +5,71 @@
 #include <cstdatomic>
 #include <cstddef>
 #include <cstdint>
+#include <stdexcept>
 
 #include "medida/metric_name.h"
 
 namespace medida {
 
-  MetricName::MetricName(std::string group, std::string type, std::string name, std::string scope, std::string bean)
-      : group_(group),
-        type_(type),
-        name_(name),
-        scope_(scope),
-        bean_(bean) {
+MetricName::MetricName(const std::string &domain, const std::string &type,
+    const std::string &name, const std::string &scope)
+    : domain_(domain),
+      type_(type),
+      name_(name),
+      scope_(scope) {
+  if (domain.empty()) {
+    throw std::invalid_argument("domain must be non-empty");
   }
-
-  MetricName::~MetricName() {
-
+  if (type.empty()) {
+    throw std::invalid_argument("type must be non-empty");
   }
-
-  std::string MetricName::getGroup() const {
-    return group_;
+  if (name.empty()) {
+    throw std::invalid_argument("name must be non-empty");
   }
+}
 
-  std::string MetricName::getType() const {
-    return type_;
-  }
-
-  std::string MetricName::getName() const {
-    return name_;
-  }
-
-  std::string MetricName::getScope() const {
-    return scope_;
-  }
-
-  std::string MetricName::getBean() const {
-    return bean_;
-  }
-
-  std::string MetricName::toString() const {
-    return bean_;
-  }
-
-  bool MetricName::hasScope() const {
-    return scope_.empty();
-  }
-
-  bool MetricName::equals(const MetricName &other) const {
-    return false;
-  }
-
-  int MetricName::compareTo(const MetricName &other) const {
-    return 0;
-  }
+MetricName::~MetricName() {
 
 }
+
+std::string MetricName::domain() const {
+  return domain_;
+}
+
+std::string MetricName::type() const {
+  return type_;
+}
+
+std::string MetricName::name() const {
+  return name_;
+}
+
+std::string MetricName::scope() const {
+  return scope_;
+}
+
+std::string MetricName::ToString() const {
+  return domain_ + "." + type_ + "." + name_  + (scope_.empty() ? "" : "." + scope_);
+}
+
+bool MetricName::has_scope() const {
+  return !scope_.empty();
+}
+
+bool MetricName::operator==(const MetricName &other) const {
+  return (
+      domain_ == other.domain_ &&
+      type_ == other.type_ &&
+      name_ == other.name_ &&
+      scope_ == other.scope_);
+}
+
+bool MetricName::operator!=(const MetricName &other) const {
+  return (
+      domain_ != other.domain_ ||
+      type_ != other.type_ ||
+      name_ != other.name_ ||
+      scope_ != other.scope_);
+}
+
+} // name space medida
