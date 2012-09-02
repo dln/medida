@@ -16,6 +16,10 @@ Counter::Counter(std::int64_t init) : count_ {init} {
 Counter::~Counter() {
 }
 
+void Counter::Process(const MetricProcessor& processor) const  {
+  processor.Process(*this);
+}
+
 std::int64_t Counter::count() const {
   return count_.load();
 }

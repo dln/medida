@@ -23,7 +23,7 @@ public:
   ~MetricsRegistry();
   Counter& NewCounter(const MetricName &name, std::int64_t init_value = 0);
 protected:
-  std::map<MetricName, std::shared_ptr<Counter>> counters_; // FIXME: gcc 4.4 doesn't work w/unique_ptr in maps
+  std::map<MetricName, std::shared_ptr<Metric>> metrics_; // FIXME: gcc 4.4 doesn't work w/unique_ptr in maps
   mutable std::mutex mutex_;
 };
 

@@ -9,4 +9,7 @@ namespace medida {
 Metric::~Metric() {
 }
 
+void Metric::Process(const MetricProcessor& processor) const {
+}
+
 } // namespace medida

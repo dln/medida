@@ -19,11 +19,11 @@ namespace medida {
 
 Counter& MetricsRegistry::NewCounter(const MetricName &name, std::int64_t init_value) {
   std::lock_guard<std::mutex> lock {mutex_};
-  auto it = counters_.find(name);
-  if (it == counters_.end()) {
-    counters_[name] = std::make_shared<Counter>(init_value);
+  auto it = metrics_.find(name);
+  if (it == metrics_.end()) {
+    metrics_[name] = std::make_shared<Counter>(init_value);
   }
-  return *counters_[name];
+  return dynamic_cast<Counter&>(*metrics_[name]);
 }
 
 }

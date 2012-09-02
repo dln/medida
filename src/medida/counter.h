@@ -16,6 +16,7 @@ class Counter : public Metric {
 public:
   Counter(std::int64_t init = 0);
   ~Counter();
+  void Process(const MetricProcessor& processor) const;
   std::int64_t count() const;
   void set_count(std::int64_t n);
   void inc(std::int64_t n = 1);
