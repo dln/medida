@@ -8,15 +8,20 @@
 
 #include "medida/counter.h"
 
+#include "glog/logging.h"
+
 namespace medida {
 
 Counter::Counter(std::int64_t init) : count_ {init} {
+  DLOG(INFO) << "Counter " << this << " created. init=" << init;
 }
 
 Counter::~Counter() {
+  DLOG(INFO) << "Counter " << this << " destroyed";
 }
 
 void Counter::Process(const MetricProcessor& processor) const  {
+  DLOG(INFO) << "Processing Counter " << this;
   processor.Process(*this);
 }
 

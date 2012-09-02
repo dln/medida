@@ -23,6 +23,11 @@ TEST_F(CounterTest, startsAtZero) {
   EXPECT_EQ(counter.count(), 0);
 }
 
+TEST_F(CounterTest, initValue) {
+  Counter c = {42};
+  EXPECT_EQ(c.count(), 42);
+}
+
 TEST_F(CounterTest, incrementsByOne) {
   counter.inc();
   EXPECT_EQ(counter.count(), 1);
