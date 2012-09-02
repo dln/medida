@@ -2,21 +2,20 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include <cstdatomic>
-#include <cstddef>
-#include <cstdint>
-#include <stdexcept>
-
 #include "medida/metric_name.h"
+
+#include <stdexcept>
+#include <string>
 
 namespace medida {
 
 MetricName::MetricName(const std::string &domain, const std::string &type,
     const std::string &name, const std::string &scope)
-    : domain_(domain),
+    : domain_(domain),   // FIXME: gcc 4.4 borks on uniform initialization here
       type_(type),
       name_(name),
-      scope_(scope) {
+      scope_(scope),
+      repr_(domain + "." + type + "." + name  + (scope.empty() ? "" : "." + scope)) {
   if (domain.empty()) {
     throw std::invalid_argument("domain must be non-empty");
   }
@@ -49,7 +48,7 @@ std::string MetricName::scope() const {
 }
 
 std::string MetricName::ToString() const {
-  return domain_ + "." + type_ + "." + name_  + (scope_.empty() ? "" : "." + scope_);
+  return repr_;
 }
 
 bool MetricName::has_scope() const {
@@ -57,19 +56,19 @@ bool MetricName::has_scope() const {
 }
 
 bool MetricName::operator==(const MetricName &other) const {
-  return (
-      domain_ == other.domain_ &&
-      type_ == other.type_ &&
-      name_ == other.name_ &&
-      scope_ == other.scope_);
+  return repr_ == other.repr_;
 }
 
 bool MetricName::operator!=(const MetricName &other) const {
-  return (
-      domain_ != other.domain_ ||
-      type_ != other.type_ ||
-      name_ != other.name_ ||
-      scope_ != other.scope_);
+  return repr_ != other.repr_;
+}
+
+bool MetricName::operator<(const MetricName& other) const {
+  return repr_ < other.repr_;
+}
+
+bool MetricName::operator>(const MetricName& other) const {
+  return repr_ > other.repr_;
 }
 
 } // name space medida
