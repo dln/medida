@@ -10,11 +10,18 @@
 
 namespace medida {
 
-Counter::Counter() : count_ {0} {
-  clear();
+Counter::Counter(std::int64_t init) : count_ {init} {
 }
 
 Counter::~Counter() {
+}
+
+std::int64_t Counter::count() const {
+  return count_.load();
+}
+
+void Counter::set_count(std::int64_t n) {
+  count_.store(n);
 }
 
 void Counter::inc(std::int64_t n) {
@@ -23,14 +30,6 @@ void Counter::inc(std::int64_t n) {
 
 void Counter::dec(std::int64_t n) {
   count_ -= n;
-}
-
-void Counter::set_count(std::int64_t n) {
-  count_.store(n);
-}
-
-std::int64_t Counter::count() const {
-  return count_.load();
 }
 
 void Counter::clear() {

@@ -29,6 +29,7 @@ set(medida_SOURCES
   src/medida/exp_decay_sample.cc
   src/medida/metric.cc
   src/medida/metric_name.cc
+  src/medida/metrics_registry.cc
   src/medida/snapshot.cc
   src/medida/uniform_sample.cc
 )
@@ -40,6 +41,7 @@ set(medida_HEADERS
   src/medida/exp_decay_sample.h
   src/medida/metric.h
   src/medida/metric_name.h
+  src/medida/metrics_registry.h
   src/medida/sample.h
   src/medida/snapshot.h
   src/medida/uniform_sample.h

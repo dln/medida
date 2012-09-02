@@ -14,12 +14,12 @@ namespace medida {
 
 class Counter : public Metric {
 public:
-  Counter();
+  Counter(std::int64_t init = 0);
   ~Counter();
+  std::int64_t count() const;
+  void set_count(std::int64_t n);
   void inc(std::int64_t n = 1);
   void dec(std::int64_t n = 1);
-  void set_count(std::int64_t n);
-  std::int64_t count() const;
   void clear();
 protected:
   std::atomic<std::int64_t> count_;

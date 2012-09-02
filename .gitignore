@@ -8,7 +8,7 @@
 .tags*
 .DS_Store
 /CMakeFiles/*
-/build
+/build*
 /debian/*.debhelper
 /debian/*.log
 /debian/*.substvars
