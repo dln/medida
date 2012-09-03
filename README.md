@@ -1,6 +1,8 @@
 Medida - Simple metrics for C++ programs
 ========================================
 
+*NOTE: Work in progress and not for human consumption! Go away!*
+
 Created out of envy of Coda Hale's awesome Metrics library for the JVM.
 
 
