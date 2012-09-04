@@ -63,7 +63,7 @@ void ExpDecaySample::update(std::int64_t value, std::chrono::high_resolution_clo
 
   auto now = std::chrono::high_resolution_clock::now();
   if (now >= nextScaleTime_) {
-    rescale(now);
+    // rescale(now);
   }
 
 
