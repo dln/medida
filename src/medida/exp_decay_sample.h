@@ -26,18 +26,19 @@ public:
   virtual void update(std::int64_t value, std::chrono::high_resolution_clock::time_point timestamp);
   virtual Snapshot getSnapshot() const;
 protected:
-    static const std::chrono::nanoseconds kRESCALE_THRESHOLD; // = 3600L * 1000 * 1000 * 1000; // 1h in nanos
-    const double alpha_;
-    const std::uint64_t reservoirSize_;
-    std::chrono::high_resolution_clock::time_point startTime_;
-    std::atomic<std::uint64_t> nextScaleTime_;
-    std::atomic<std::uint64_t> count_;
-    std::map<double, int64_t> values_;
-    std::mutex values_mutex_;
-    std::mutex read_mutex_;
-    std::mutex write_mutex_;
-    double weight() const;
-    void rescale(long now, long next);
+  static const std::chrono::high_resolution_clock::duration kRESCALE_THRESHOLD; // = 3600L * 1000 * 1000 * 1000; // 1h in nanos
+  const double alpha_;
+  const std::uint64_t reservoirSize_;
+  std::chrono::high_resolution_clock::time_point startTime_;
+  // std::atomic<std::uint64_t> nextScaleTime_;
+  std::chrono::high_resolution_clock::time_point nextScaleTime_;
+  std::atomic<std::uint64_t> count_;
+  std::map<double, int64_t> values_;
+  std::mutex values_mutex_;
+  std::mutex read_mutex_;
+  std::mutex write_mutex_;
+  double weight(std::chrono::high_resolution_clock::duration dur) const;
+  void rescale(long now, long next);
 
 };
 

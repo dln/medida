@@ -5,14 +5,19 @@
 #include "medida/exp_decay_sample.h"
 #include "medida/snapshot.h"
 
+#include <cmath>  // GCC 4.4
 #include <cstdatomic>  // GCC 4.4
 #include <cstdint>
+#include <cstdlib>
 #include <vector>
 #include <algorithm>
 #include <array>
 #include <iostream>
 
 namespace medida {
+
+// FIXME: gcc 4.4 doesn't have constexpr
+const std::chrono::high_resolution_clock::duration ExpDecaySample::kRESCALE_THRESHOLD = std::chrono::hours(1);
 
 ExpDecaySample::ExpDecaySample(std::uint32_t reservoirSize, double alpha)
     : alpha_ {alpha},
@@ -29,7 +34,8 @@ void ExpDecaySample::clear() {
   values_.clear();
   count_.store(1);
   startTime_ = std::chrono::high_resolution_clock::now();
-  nextScaleTime_.store(0); //startTime_ + kRESCALE_THRESHOLD);
+  // nextScaleTime_.store(0); //startTime_ + kRESCALE_THRESHOLD);
+  nextScaleTime_ = startTime_ + kRESCALE_THRESHOLD;
 }
 
 std::uint64_t ExpDecaySample::size() const {
@@ -43,9 +49,7 @@ void ExpDecaySample::update(std::int64_t value) {
 void ExpDecaySample::update(std::int64_t value, std::chrono::high_resolution_clock::time_point timestamp) {
   {
     std::lock_guard<std::mutex> lock {read_mutex_};
-    // final double priority = weight(timestamp - startTime) / ThreadLocalRandom.current().nextDouble();
-    // double priority = weight(timestamp - startTime_) / ...
-    auto priority = 0.0;
+    auto priority = weight(timestamp - startTime_) / (std::rand() / RAND_MAX);
     auto newCount = count_.fetch_add(1);
     auto first = values_.begin()->first;
     if (first < priority) {
@@ -57,10 +61,10 @@ void ExpDecaySample::update(std::int64_t value, std::chrono::high_resolution_clo
     }
   }
 
-  // auto now = std::chrono::high_resolution_clock::now();
-  // if (now >= nextScaleTime_) {
-  //   rescale(now);
-  // }
+  auto now = std::chrono::high_resolution_clock::now();
+  if (now >= nextScaleTime_) {
+    rescale(now);
+  }
 
 
 
@@ -88,6 +92,11 @@ void ExpDecaySample::update(std::int64_t value, std::chrono::high_resolution_clo
         }
     */
 }
+
+double ExpDecaySample::weight(std::chrono::high_resolution_clock::duration dur) const {
+  return std::exp(alpha_ * dur.count());
+}
+
 
 Snapshot ExpDecaySample::getSnapshot() const {
 
