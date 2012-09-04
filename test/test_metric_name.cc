@@ -20,30 +20,30 @@ protected:
 };
 
 TEST_F(MetricNameTest, hasADomain) {
-  EXPECT_EQ(name.domain(), "domain");
+  EXPECT_EQ("domain", name.domain());
 }
 
 TEST_F(MetricNameTest, hasAType) {
-  EXPECT_EQ(name.type(), "type");
+  EXPECT_EQ("type", name.type());
 }
 
 TEST_F(MetricNameTest, hasAName) {
-  EXPECT_EQ(name.name(), "name");
+  EXPECT_EQ("name", name.name());
 }
 
 TEST_F(MetricNameTest, hasAScope) {
-  EXPECT_EQ(name.scope(), "scope");
+  EXPECT_EQ("scope", name.scope());
   EXPECT_TRUE(name.has_scope());
 }
 
 TEST_F(MetricNameTest, isHumanReadable) {
-  EXPECT_EQ(name.ToString(), "domain.type.name.scope");
+  EXPECT_EQ("domain.type.name.scope", name.ToString());
 }
 
 TEST_F(MetricNameTest, hasAWorkingEquals) {
   EXPECT_EQ(name, name);
-  EXPECT_EQ(name, MetricName("domain", "type", "name", "scope"));
-  EXPECT_NE(name, MetricName("domain", "type", "name"));
+  EXPECT_EQ(MetricName("domain", "type", "name", "scope"), name);
+  EXPECT_NE(MetricName("domain", "type", "name"), name);
 }
 
 TEST_F(MetricNameTest, hasAWorkingLessThan) {

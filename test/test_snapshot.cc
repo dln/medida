@@ -21,35 +21,35 @@ protected:
 };
 
 TEST_F(SnapshotTest, smallQuantilesAreTheFirstValue) {
-  EXPECT_DOUBLE_EQ(snapshot.getValue(0.0), 1);
+  EXPECT_DOUBLE_EQ(1, snapshot.getValue(0.0));
 }
 
 TEST_F(SnapshotTest, bigQuantilesAreTheLastValue) {
-  EXPECT_DOUBLE_EQ(snapshot.getValue(1.0), 5);
+  EXPECT_DOUBLE_EQ(5, snapshot.getValue(1.0));
 }
 
 TEST_F(SnapshotTest, hasAMedian) {
-  EXPECT_DOUBLE_EQ(snapshot.getMedian(), 3);
+  EXPECT_DOUBLE_EQ(3, snapshot.getMedian());
 }
 
 TEST_F(SnapshotTest, hasAp75) {
-  EXPECT_DOUBLE_EQ(snapshot.get75thPercentile(), 4.5);
+  EXPECT_DOUBLE_EQ(4.5, snapshot.get75thPercentile());
 }
 
 TEST_F(SnapshotTest, hasAp95) {
-  EXPECT_DOUBLE_EQ(snapshot.get95thPercentile(), 5.0);
+  EXPECT_DOUBLE_EQ(5.0, snapshot.get95thPercentile());
 }
 
 TEST_F(SnapshotTest, hasAp98) {
-  EXPECT_DOUBLE_EQ(snapshot.get98thPercentile(), 5.0);
+  EXPECT_DOUBLE_EQ(5.0, snapshot.get98thPercentile());
 }
 
 TEST_F(SnapshotTest, hasAp99) {
-  EXPECT_DOUBLE_EQ(snapshot.get99thPercentile(), 5.0);
+  EXPECT_DOUBLE_EQ(5.0, snapshot.get99thPercentile());
 }
 
 TEST_F(SnapshotTest, hasAp999) {
-  EXPECT_DOUBLE_EQ(snapshot.get999thPercentile(), 5.0);
+  EXPECT_DOUBLE_EQ(5.0, snapshot.get999thPercentile());
 }
 
 TEST_F(SnapshotTest, hasValues) {
@@ -58,7 +58,7 @@ TEST_F(SnapshotTest, hasValues) {
 }
 
 TEST_F(SnapshotTest, hasASize) {
-  EXPECT_EQ(snapshot.size(), std::size_t(5));
+  EXPECT_EQ(5, snapshot.size());
 }
 
 TEST_F(SnapshotTest, canAlsoBeCreatedFromACollectionOfLongs) {
