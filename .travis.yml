@@ -1,12 +1,11 @@
 language: cpp
 compiler:
-  - gcc-4.4
+  - gcc
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq cmake gcc-4.4 libgoogle-glog-dev
 before_script:
-#  cmake -DCMAKE_CXX_COMPILER=g++-4.4 -DCMAKE_C_COMPILER=gcc-4.4 -DCMAKE_BUILD_TYPE=DEBUG .
-  cmake -DCMAKE_BUILD_TYPE=DEBUG .
+  cmake -DCMAKE_CXX_COMPILER=g++-4.4 -DCMAKE_C_COMPILER=gcc-4.4 -DCMAKE_BUILD_TYPE=DEBUG .
 script: make check
 branches:
   only:
