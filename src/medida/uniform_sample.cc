@@ -5,6 +5,7 @@
 #include "medida/uniform_sample.h"
 
 #include <algorithm>
+#include <random>
 
 #include "medida/snapshot.h"
 
@@ -12,6 +13,7 @@ namespace medida {
 
 UniformSample::UniformSample(std::uint32_t reservoirSize)
     : count_  {1},
+      random_ {std::random_device()()},
       values_ (reservoirSize) { // FIXME: Explicit and non-uniform
   clear();
 }
@@ -49,10 +51,11 @@ Snapshot UniformSample::getSnapshot() const {
 }
 
 std::int64_t UniformSample::nextLong(std::int64_t n) const {
+  // FIXME: Thread-local RNG would be nice.
+  std::lock_guard<std::mutex> lock {random_mutex_};
   std::uint64_t bits, val;
   do {
-    // FIXME: replace std::rand with boost::random::mt19937_64
-    bits = std::rand() & (~(1L << kBITS_PER_LONG));
+    bits = random_();
     val = bits % n;
   } while (bits - val + (n - 1) < 0L);
   return val;

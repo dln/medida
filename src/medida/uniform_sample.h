@@ -7,9 +7,11 @@
 
 #include <array>
 #include <atomic>
-#include <memory>
-#include <vector>
 #include <cstdint>
+#include <memory>
+#include <mutex>
+#include <random>
+#include <vector>
 
 #include "medida/sample.h"
 
@@ -24,7 +26,8 @@ public:
   virtual void update(std::int64_t value);
   virtual Snapshot getSnapshot() const;
 protected:
-    static const int kBITS_PER_LONG = 63;
+    mutable std::mt19937_64 random_;
+    mutable std::mutex random_mutex_;
     std::atomic<std::uint64_t> count_;
     std::vector<std::atomic<std::int64_t>> values_;
     std::int64_t nextLong(std::int64_t n) const;
