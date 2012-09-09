@@ -18,15 +18,15 @@ namespace medida {
 
   // FIXME: GCC 4.6 doesn't support constructor delegation.
 
-  Snapshot::Snapshot(const std::vector<double>& values) : values_ {values.begin(), values.end()} {
+  Snapshot::Snapshot(const std::vector<double>& values) : values_ {std::begin(values), std::end(values)} {
     Init();
   }
 
-  Snapshot::Snapshot(const std::vector<std::int64_t>& values) : values_ {values.begin(), values.end()} {
+  Snapshot::Snapshot(const std::vector<std::int64_t>& values) : values_ {std::begin(values), std::end(values)} {
     Init();
   }
 
-  Snapshot::Snapshot(const std::vector<std::atomic<std::int64_t>>& values) : values_ {values.begin(), values.end()} {
+  Snapshot::Snapshot(const std::vector<std::atomic<std::int64_t>>& values) : values_ {std::begin(values), std::end(values)} {
     Init();
   }
 
@@ -34,7 +34,7 @@ namespace medida {
   }
 
   void Snapshot::Init() {
-    std::sort(this->values_.begin(), this->values_.end());
+    std::sort(std::begin(this->values_), std::end(this->values_));
   }
 
   std::size_t Snapshot::size() const {
@@ -64,8 +64,8 @@ namespace medida {
       return values_.back();
     }
 
-    auto lower = values_.at(pos - 1);
-    auto upper = values_.at(pos);
+    auto lower = values_[pos - 1];
+    auto upper = values_[pos];
     return lower + (pos - std::floor(pos)) * (upper - lower);
 
   }

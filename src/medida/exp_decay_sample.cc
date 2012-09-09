@@ -50,11 +50,11 @@ void ExpDecaySample::update(std::int64_t value, std::chrono::high_resolution_clo
     std::lock_guard<std::mutex> lock {read_mutex_};
     auto priority = weight(timestamp - startTime_) / (std::rand() / RAND_MAX);
     auto newCount = count_.fetch_add(1);
-    auto first = values_.begin()->first;
+    auto first = std::begin(values_)->first;
     if (first < priority) {
       if (values_.insert({priority, value}).second) {
         while (values_.erase(first) == 0) {
-          first = values_.begin()->first;
+          first = std::begin(values_)->first;
         }
       }
     }
