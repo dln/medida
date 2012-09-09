@@ -27,7 +27,8 @@ void UniformSample::clear() {
 }
 
 std::uint64_t UniformSample::size() const {
-  return std::min(count_.load(), values_.size());
+  std::uint64_t size = values_.size();
+  return std::min(count_.load(), size);
 }
 
 void UniformSample::update(std::int64_t value) {
