@@ -2,14 +2,11 @@
 // Copyright (c) 2012 Daniel Lundin AB
 //
 
-#include <vector>
+#include "medida/counter.h"
 
 #include <gtest/gtest.h>
 
-#include "medida/counter.h"
-
 using namespace medida;
-
 
 class CounterTest : public ::testing::Test {
 protected:

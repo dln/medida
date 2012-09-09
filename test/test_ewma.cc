@@ -2,13 +2,9 @@
 // Copyright (c) 2012 Daniel Lundin AB
 //
 
-#include <chrono>
-#include <vector>
-#include <iostream>
+#include "medida/ewma.h"
 
 #include <gtest/gtest.h>
-
-#include "medida/ewma.h"
 
 using namespace medida;
 

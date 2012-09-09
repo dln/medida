@@ -6,9 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <stdexcept>
-#include <string>
 
 namespace medida {
 
@@ -67,7 +65,6 @@ namespace medida {
     auto lower = values_[pos - 1];
     auto upper = values_[pos];
     return lower + (pos - std::floor(pos)) * (upper - lower);
-
   }
 
   double Snapshot::getMedian() const {

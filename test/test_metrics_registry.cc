@@ -4,13 +4,9 @@
 
 #include "medida/metrics_registry.h"
 
-#include <vector>
-
 #include <gtest/gtest.h>
 
-
 using namespace medida;
-
 
 class MetricsRegistryTest : public ::testing::Test {
 protected:

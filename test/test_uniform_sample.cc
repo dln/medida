@@ -2,14 +2,12 @@
 // Copyright (c) 2012 Daniel Lundin AB
 //
 
-#include <vector>
-
-#include <gtest/gtest.h>
 
 #include "medida/uniform_sample.h"
 
-using namespace medida;
+#include <gtest/gtest.h>
 
+using namespace medida;
 
 TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
   UniformSample sample = {100};

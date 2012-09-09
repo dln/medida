@@ -2,14 +2,11 @@
 // Copyright (c) 2012 Daniel Lundin AB
 //
 
-#include <vector>
+#include "medida/metric_name.h"
 
 #include <gtest/gtest.h>
 
-#include "medida/metric_name.h"
-
 using namespace medida;
-
 
 class MetricNameTest : public ::testing::Test {
 protected:

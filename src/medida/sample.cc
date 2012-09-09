@@ -12,5 +12,4 @@ namespace medida {
   Sample::~Sample() {
   }
 
-
 }

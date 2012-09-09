@@ -2,8 +2,6 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include <cmath>
-
 #include "medida/ewma.h"
 
 namespace medida {

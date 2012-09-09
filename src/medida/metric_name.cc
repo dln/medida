@@ -5,7 +5,6 @@
 #include "medida/metric_name.h"
 
 #include <stdexcept>
-#include <string>
 
 namespace medida {
 

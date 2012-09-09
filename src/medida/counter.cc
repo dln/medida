@@ -2,10 +2,6 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include <atomic>
-#include <cstddef>
-#include <cstdint>
-
 #include "medida/counter.h"
 
 #include "glog/logging.h"

@@ -3,20 +3,16 @@
 //
 
 #include "medida/uniform_sample.h"
-#include "medida/snapshot.h"
 
-#include <atomic>
-#include <cstdint>
-#include <vector>
 #include <algorithm>
-#include <array>
-#include <iostream>
+
+#include "medida/snapshot.h"
 
 namespace medida {
 
 UniformSample::UniformSample(std::uint32_t reservoirSize)
-    : count_  (1),
-      values_ (reservoirSize) { // FIXME: GCC 4.6 uniform initialization oddity?
+    : count_  {1},
+      values_ (reservoirSize) { // FIXME: Explicit and non-uniform
   clear();
 }
 
@@ -31,16 +27,11 @@ void UniformSample::clear() {
 }
 
 std::uint64_t UniformSample::size() const {
-  auto c = count_.load();
-  auto size = values_.size();
-  if (c > size) {
-    return size;
-  }
-  return c;
+  return std::min(count_.load(), values_.size());
 }
 
 void UniformSample::update(std::int64_t value) {
-  auto c = count_++;
+  auto c = count_.fetch_add(1);
   auto size = values_.size();
   if (c <= size) {
     values_[c - 1].store(value);
