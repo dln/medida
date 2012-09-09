@@ -12,7 +12,7 @@ using namespace medida;
 
 
 TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
-  UniformSample sample {100};
+  UniformSample sample = {100};
 
   for (auto i = 0; i < 1000; i++) {
     sample.update(i);

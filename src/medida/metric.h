@@ -11,7 +11,7 @@ namespace medida {
 
 class Metric {
 public:
-  virtual ~Metric() = 0;
+  virtual ~Metric() {};
   virtual void Process(const MetricProcessor& processor) const = 0;
 };
 

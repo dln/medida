@@ -8,25 +8,20 @@
 
 namespace medida {
 
-  // GCC 4.4 doesn't support constexpr
-  const double EWMA::kM1_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kONE_MINUTE);
-  const double EWMA::kM5_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIVE_MINUTES);
-  const double EWMA::kM15_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIFTEEN_MINUTES);
-
   EWMA::EWMA(double alpha, std::chrono::nanoseconds interval)
       : initialized_ {false},
-        rate_ {0.0},
-        uncounted_ {0},
-        alpha_ {alpha},
-        interval_ {interval} {
+        rate_        {0.0},
+        uncounted_   {0},
+        alpha_       {alpha},
+        interval_    {interval} {
   }
 
   EWMA::EWMA(EWMA &&other) 
       : initialized_ {other.initialized_},
-        rate_ {other.rate_},
-        uncounted_ {other.uncounted_.load()},
-        alpha_ {other.alpha_},
-        interval_ {other.interval_} {
+        rate_        {other.rate_},
+        uncounted_   {other.uncounted_.load()},
+        alpha_       {other.alpha_},
+        interval_    {other.interval_} {
   }
 
   EWMA::~EWMA() {

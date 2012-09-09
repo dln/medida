@@ -6,9 +6,9 @@
 #define MEDIDA_UNIFORM_SAMPLE_H_
 
 #include <array>
+#include <atomic>
 #include <memory>
 #include <vector>
-#include <cstdatomic>  // GCC 4.4
 #include <cstdint>
 
 #include "medida/sample.h"
@@ -25,9 +25,8 @@ public:
   virtual Snapshot getSnapshot() const;
 protected:
     static const int kBITS_PER_LONG = 63;
-    const std::uint32_t size_;
     std::atomic<std::uint64_t> count_;
-    std::unique_ptr<std::atomic<std::int64_t>[]> values_;
+    std::vector<std::atomic<std::int64_t>> values_;
     std::int64_t nextLong(std::int64_t n) const;
 };
 

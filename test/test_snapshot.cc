@@ -15,7 +15,6 @@ class SnapshotTest : public ::testing::Test {
 protected:
   SnapshotTest() : values {5, 1, 2, 3, 4}, snapshot {values} {
   };
-
   const std::vector<double> values;
   const Snapshot snapshot;
 };
@@ -53,7 +52,7 @@ TEST_F(SnapshotTest, hasAp999) {
 }
 
 TEST_F(SnapshotTest, hasValues) {
-  auto ref {1.0, 2.0, 3.0, 4.0, 5.0};
+  auto ref = {1.0, 2.0, 3.0, 4.0, 5.0};
   EXPECT_TRUE(std::equal(ref.begin(), ref.end(), snapshot.getValues().begin()));
 }
 
@@ -61,9 +60,17 @@ TEST_F(SnapshotTest, hasASize) {
   EXPECT_EQ(5, snapshot.size());
 }
 
-TEST_F(SnapshotTest, canAlsoBeCreatedFromACollectionOfLongs) {
-  auto ref_long {5L, 1L, 2L, 4L, 3L};
-  auto ref_doubles {1.0, 2.0, 3.0, 4.0, 5.0};
-  Snapshot snap {ref_long};
-  EXPECT_TRUE(std::equal(ref_doubles.begin(), ref_doubles.end(), snap.getValues().begin()));
+TEST_F(SnapshotTest, canAlsoBeCreatedFromACollectionOfInt64) {
+  auto expected_doubles = {1.0, 2.0, 3.0, 4.0, 5.0};
+  auto vector_int64 = std::vector<std::int64_t> {1LL, 2LL, 3LL, 4LL, 5LL};
+  Snapshot snapshot {vector_int64};
+  EXPECT_TRUE(std::equal(expected_doubles.begin(), expected_doubles.end(), snapshot.getValues().begin()));
+}
+
+TEST_F(SnapshotTest, canAlsoBeCreatedFromACollectionOfAtomicInt64) {
+  auto expected_doubles = {1.0, 2.0, 3.0, 4.0, 5.0};
+  auto ints = {1L, 2L, 3L, 4L, 5L};
+  auto atomics = std::vector<std::atomic<std::int64_t>>(ints.begin(), ints.end());
+  Snapshot snapshot {atomics};
+  EXPECT_TRUE(std::equal(expected_doubles.begin(), expected_doubles.end(), snapshot.getValues().begin()));
 }

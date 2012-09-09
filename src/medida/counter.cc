@@ -2,7 +2,7 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include <cstdatomic>
+#include <atomic>
 #include <cstddef>
 #include <cstdint>
 

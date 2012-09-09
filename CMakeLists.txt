@@ -27,7 +27,6 @@ set(medida_SOURCES
   src/medida/counter.cc
   src/medida/ewma.cc
   src/medida/exp_decay_sample.cc
-  src/medida/metric.cc
   src/medida/metric_name.cc
   src/medida/metrics_registry.cc
   src/medida/snapshot.cc

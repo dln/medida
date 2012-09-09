@@ -26,7 +26,7 @@ Counter& MetricsRegistry::NewCounter(const MetricName &name, std::int64_t init_v
   auto it = metrics_.find(name);
   if (it == metrics_.end()) {
     DLOG(INFO) << "NewCounter: " << name.ToString() << " does not exist. Creating.";
-    metrics_[name] = std::make_shared<Counter>(init_value);
+    metrics_[name].reset(new Counter(init_value)); // GCC 4.6: Bug 44436 emplace* not implemented
   } else {
     DLOG(INFO) << "NewCounter: " << name.ToString() << " already exists.";
   }

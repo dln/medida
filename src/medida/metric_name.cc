@@ -11,11 +11,11 @@ namespace medida {
 
 MetricName::MetricName(const std::string &domain, const std::string &type,
     const std::string &name, const std::string &scope)
-    : domain_(domain),   // FIXME: gcc 4.4 borks on uniform initialization here
-      type_(type),
-      name_(name),
-      scope_(scope),
-      repr_(domain + "." + type + "." + name  + (scope.empty() ? "" : "." + scope)) {
+    : domain_ {domain},
+      type_   {type},
+      name_   {name},
+      scope_  {scope},
+      repr_   {domain + "." + type + "." + name  + (scope.empty() ? "" : "." + scope)} {
   if (domain.empty()) {
     throw std::invalid_argument("domain must be non-empty");
   }

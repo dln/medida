@@ -5,18 +5,17 @@
 #include "medida/exp_decay_sample.h"
 #include "medida/snapshot.h"
 
-#include <cmath>  // GCC 4.4
-#include <cstdatomic>  // GCC 4.4
-#include <cstdint>
-#include <cstdlib>
-#include <vector>
 #include <algorithm>
 #include <array>
+#include <atomic>
+#include <cmath>
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
+#include <vector>
 
 namespace medida {
 
-// FIXME: gcc 4.4 doesn't have constexpr
 const std::chrono::high_resolution_clock::duration ExpDecaySample::kRESCALE_THRESHOLD = std::chrono::hours(1);
 
 ExpDecaySample::ExpDecaySample(std::uint32_t reservoirSize, double alpha)

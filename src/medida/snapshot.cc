@@ -16,11 +16,17 @@ namespace medida {
     Init();
   }
 
-  Snapshot::Snapshot(std::vector<double> values) : values_(values) {
+  // FIXME: GCC 4.6 doesn't support constructor delegation.
+
+  Snapshot::Snapshot(const std::vector<double>& values) : values_ {values.begin(), values.end()} {
     Init();
   }
 
-  Snapshot::Snapshot(std::vector<long> values) : values_(values.begin(), values.end()) {
+  Snapshot::Snapshot(const std::vector<std::int64_t>& values) : values_ {values.begin(), values.end()} {
+    Init();
+  }
+
+  Snapshot::Snapshot(const std::vector<std::atomic<std::int64_t>>& values) : values_ {values.begin(), values.end()} {
     Init();
   }
 

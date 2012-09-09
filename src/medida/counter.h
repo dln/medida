@@ -5,7 +5,7 @@
 #ifndef MEDIDA_COUNTER_H_
 #define MEDIDA_COUNTER_H_
 
-#include <cstdatomic>
+#include <atomic>
 #include <cstdint>
 
 #include "medida/metric.h"
