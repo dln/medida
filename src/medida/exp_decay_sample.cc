@@ -25,7 +25,7 @@ ExpDecaySample::~ExpDecaySample() {
 void ExpDecaySample::clear() {
   std::lock_guard<std::mutex> lock {write_mutex_};
   values_.clear();
-  count_.store(1);
+  count_ = 1;
   startTime_ = Clock::now();
   nextScaleTime_ = startTime_ + kRESCALE_THRESHOLD;
 }
@@ -42,7 +42,7 @@ void ExpDecaySample::update(std::int64_t value, Clock::time_point timestamp) {
   {
     std::lock_guard<std::mutex> lock {read_mutex_};
     auto priority = weight(timestamp - startTime_) / (std::rand() / RAND_MAX);
-    auto newCount = count_.fetch_add(1);
+    auto newCount = count_++;
     auto first = std::begin(values_)->first;
     if (first < priority) {
       if (values_.insert({priority, value}).second) {

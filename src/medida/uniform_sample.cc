@@ -21,9 +21,9 @@ UniformSample::~UniformSample() {
 
 void UniformSample::clear() {
   for (auto& v : values_) {
-    v.store(0);
+    v = 0;
   }
-  count_.store(1);
+  count_ = 1;
 }
 
 std::uint64_t UniformSample::size() const {
@@ -32,14 +32,14 @@ std::uint64_t UniformSample::size() const {
 }
 
 void UniformSample::update(std::int64_t value) {
-  auto c = count_.fetch_add(1);
+  auto c = count_++;
   auto size = values_.size();
   if (c <= size) {
-    values_[c - 1].store(value);
+    values_[c - 1] = value;
   } else {
     auto r = nextLong(c);
     if (r < size) {
-      values_[r].store(value);
+      values_[r] = value;
     }
   }
 }

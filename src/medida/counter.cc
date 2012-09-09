@@ -26,7 +26,7 @@ std::int64_t Counter::count() const {
 }
 
 void Counter::set_count(std::int64_t n) {
-  count_.store(n);
+  count_ = n;
 }
 
 void Counter::inc(std::int64_t n) {
