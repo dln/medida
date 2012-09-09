@@ -20,6 +20,3 @@ target_link_libraries(test-medida
 )
 
 add_test(test-medida test-medida --gtest_output=xml)
-
-# Kludge for cmake "bug" to build and run tests from a single target
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS test-medida)
