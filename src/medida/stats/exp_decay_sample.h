@@ -8,9 +8,10 @@
 #include <array>
 #include <atomic>
 #include <chrono>
+#include <cstdint>
 #include <map>
 #include <mutex>
-#include <cstdint>
+#include <random>
 
 #include "medida/types.h"
 #include "medida/stats/sample.h"
@@ -22,11 +23,11 @@ class ExpDecaySample : public Sample {
 public:
   ExpDecaySample(std::uint32_t reservoirSize, double alpha);
   ~ExpDecaySample();
-  virtual void clear();
+  virtual void Clear();
   virtual std::uint64_t size() const;
-  virtual void update(std::int64_t value);
-  virtual void update(std::int64_t value, Clock::time_point timestamp);
-  virtual Snapshot getSnapshot() const;
+  virtual void Update(std::int64_t value);
+  virtual void Update(std::int64_t value, Clock::time_point timestamp);
+  virtual Snapshot MakeSnapshot() const;
 protected:
   static const Clock::duration kRESCALE_THRESHOLD;
   const double alpha_;
@@ -35,12 +36,13 @@ protected:
   Clock::time_point nextScaleTime_;
 
   std::atomic<std::uint64_t> count_;
-  std::map<double, int64_t> values_;
+  std::map<double, std::int64_t> values_;
   std::mutex values_mutex_;
   std::mutex read_mutex_;
   std::mutex write_mutex_;
-  double weight(Clock::duration dur) const;
-  void rescale(long now, long next);
+  mutable std::mt19937 rng_;
+  std::uniform_real_distribution<> dist_;
+  void Rescale(const Clock::time_point& when);
 
 };
 

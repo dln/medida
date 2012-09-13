@@ -12,7 +12,7 @@ using namespace medida::stats;
 TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
   UniformSample sample {100};
 
-  for (auto i = 0; i < 1234; i++) {
+  for (auto i = 0; i < 1000; i++) {
     sample.Update(i);
   }
 
@@ -22,18 +22,18 @@ TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
   EXPECT_EQ(100, vals.size());
 
   for (auto& v : vals) {
-    EXPECT_LT(v, 1234);
-    EXPECT_GE(v, 0);
+    EXPECT_LT(v, 1000.0);
+    EXPECT_GE(v, 0.0);
   }
 }
 
 TEST(UniformSampleTest, clear) {
   UniformSample sample {100};
-  for (auto i = 0; i < 1234; i++) {
+  for (auto i = 0; i < 10; i++) {
     sample.Update(i);
   }
 
-  EXPECT_EQ(100, sample.size());
+  EXPECT_EQ(10, sample.size());
 
   sample.Clear();
 
