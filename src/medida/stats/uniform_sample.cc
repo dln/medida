@@ -7,26 +7,30 @@
 #include <algorithm>
 #include <random>
 
+#include "glog/logging.h"
+
 #include "medida/stats/snapshot.h"
 
 namespace medida {
 namespace stats {
 
 UniformSample::UniformSample(std::uint32_t reservoirSize)
-    : count_  {1},
-      random_ {std::random_device()()},
-      values_ (reservoirSize) { // FIXME: Explicit and non-uniform
-  clear();
+    : count_     {},
+      values_    (reservoirSize), // FIXME: Explicit and non-uniform
+      rng_       {std::random_device()()},
+      rng_mutex_ {} {
+  Clear();
 }
 
 UniformSample::~UniformSample() {
 }
 
-void UniformSample::clear() {
+void UniformSample::Clear() {
   for (auto& v : values_) {
     v = 0;
   }
-  count_ = 1;
+  count_ = 0;
+  DLOG(INFO) << "UniformSample cleared";
 }
 
 std::uint64_t UniformSample::size() const {
@@ -34,32 +38,23 @@ std::uint64_t UniformSample::size() const {
   return std::min(count_.load(), size);
 }
 
-void UniformSample::update(std::int64_t value) {
-  auto c = count_++;
+void UniformSample::Update(std::int64_t value) {
+  auto count = ++count_;
   auto size = values_.size();
-  if (c <= size) {
-    values_[c - 1] = value;
+  if (count < size) {
+    values_[count] = value;
   } else {
-    auto r = nextLong(c);
-    if (r < size) {
-      values_[r] = value;
+    std::uniform_int_distribution<> uniform(0, count);
+    std::lock_guard<std::mutex> lock {rng_mutex_}; // FIXME: Thread-local RNG?
+    auto rand = uniform(rng_);
+    if (rand < size) {
+      values_[rand] = value;
     }
   }
 }
 
-Snapshot UniformSample::getSnapshot() const {
+Snapshot UniformSample::MakeSnapshot() const {
   return {values_};
-}
-
-std::int64_t UniformSample::nextLong(std::int64_t n) const {
-  // FIXME: Thread-local RNG would be nice.
-  std::lock_guard<std::mutex> lock {random_mutex_};
-  std::uint64_t bits, val;
-  do {
-    bits = random_();
-    val = bits % n;
-  } while (bits - val + (n - 1) < 0L);
-  return val;
 }
 
 } // namespace stats

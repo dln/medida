@@ -22,16 +22,15 @@ class UniformSample : public Sample {
 public:
   UniformSample(std::uint32_t reservoirSize);
   ~UniformSample();
-  virtual void clear();
+  virtual void Clear();
   virtual std::uint64_t size() const;
-  virtual void update(std::int64_t value);
-  virtual Snapshot getSnapshot() const;
+  virtual void Update(std::int64_t value);
+  virtual Snapshot MakeSnapshot() const;
 protected:
-    mutable std::mt19937_64 random_;
-    mutable std::mutex random_mutex_;
     std::atomic<std::uint64_t> count_;
     std::vector<std::atomic<std::int64_t>> values_;
-    std::int64_t nextLong(std::int64_t n) const;
+    mutable std::mt19937_64 rng_;
+    mutable std::mutex rng_mutex_;
 };
 
 } // namespace stats

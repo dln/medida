@@ -10,19 +10,33 @@
 using namespace medida::stats;
 
 TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
-  UniformSample sample = {100};
+  UniformSample sample {100};
 
-  for (auto i = 0; i < 1000; i++) {
-    sample.update(i);
+  for (auto i = 0; i < 1234; i++) {
+    sample.Update(i);
   }
 
   EXPECT_EQ(100, sample.size());
 
-  auto vals = sample.getSnapshot().getValues();
+  auto vals = sample.MakeSnapshot().getValues();
   EXPECT_EQ(100, vals.size());
 
-  for (auto it = vals.begin(); it != vals.end(); ++it) {
-    EXPECT_TRUE(*it < 1000.0);
-    EXPECT_TRUE(*it >= 0.0);
+  for (auto& v : vals) {
+    EXPECT_LT(v, 1234);
+    EXPECT_GE(v, 0);
   }
 }
+
+TEST(UniformSampleTest, clear) {
+  UniformSample sample {100};
+  for (auto i = 0; i < 1234; i++) {
+    sample.Update(i);
+  }
+
+  EXPECT_EQ(100, sample.size());
+
+  sample.Clear();
+
+  EXPECT_EQ(0, sample.size());
+}
+
