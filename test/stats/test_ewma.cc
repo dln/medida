@@ -2,11 +2,11 @@
 // Copyright (c) 2012 Daniel Lundin AB
 //
 
-#include "medida/ewma.h"
+#include "medida/stats/ewma.h"
 
 #include <gtest/gtest.h>
 
-using namespace medida;
+using namespace medida::stats;
 
 void elapseMinute(EWMA &ewma) {
   for (int i = 1; i <= 12; i++) { // 12 * 5s

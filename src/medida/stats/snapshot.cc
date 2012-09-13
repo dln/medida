@@ -2,13 +2,14 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include "medida/snapshot.h"
+#include "medida/stats/snapshot.h"
 
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
 namespace medida {
+namespace stats {
 
   Snapshot::Snapshot() {
     Init();
@@ -91,4 +92,6 @@ namespace medida {
     return getValue(kP999_Q);
   }
 
-}
+
+} // namespace stats
+} // namespace medida

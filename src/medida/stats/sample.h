@@ -8,9 +8,10 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "medida/snapshot.h"
+#include "medida/stats/snapshot.h"
 
 namespace medida {
+namespace stats {
 
 class Sample {
 public:
@@ -21,6 +22,7 @@ public:
   virtual Snapshot getSnapshot() const = 0;
 };
 
+} // namespace stats
 } // namespace medida
 
 #endif // MEDIDA_SAMPLE_H_

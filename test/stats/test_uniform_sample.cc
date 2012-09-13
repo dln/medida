@@ -3,11 +3,11 @@
 //
 
 
-#include "medida/uniform_sample.h"
+#include "medida/stats/uniform_sample.h"
 
 #include <gtest/gtest.h>
 
-using namespace medida;
+using namespace medida::stats;
 
 TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
   UniformSample sample = {100};

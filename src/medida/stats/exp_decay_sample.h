@@ -12,10 +12,11 @@
 #include <mutex>
 #include <cstdint>
 
-#include "medida/sample.h"
 #include "medida/types.h"
+#include "medida/stats/sample.h"
 
 namespace medida {
+namespace stats {
 
 class ExpDecaySample : public Sample {
 public:
@@ -43,6 +44,7 @@ protected:
 
 };
 
+} // namespace stats
 } // namespace medida
 
 #endif // MEDIDA_EXP_DECAY_SAMPLE_H_

@@ -11,6 +11,7 @@
 #include <vector>
 
 namespace medida {
+namespace stats {
 
 class Snapshot {
 public:
@@ -40,6 +41,7 @@ protected:
   static constexpr double kP999_Q = 0.999;
 };
 
-}
+} // namespace stats
+} // namespace medida
 
 #endif // MEDIDA_METRICS_SNAPSHOT_H_

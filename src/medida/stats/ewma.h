@@ -12,6 +12,7 @@
 #include <cstdint>
 
 namespace medida {
+namespace stats {
 
 class EWMA {
 public:
@@ -42,6 +43,7 @@ protected:
   const std::chrono::nanoseconds interval_;
 };
 
+} // namespace stats
 } // namespace medida
 
 #endif // MEDIDA_EWMA_H_

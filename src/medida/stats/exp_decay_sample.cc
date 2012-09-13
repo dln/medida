@@ -2,13 +2,14 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include "medida/exp_decay_sample.h"
+#include "medida/stats/exp_decay_sample.h"
 
 #include <cmath>
 
-#include "medida/snapshot.h"
+#include "medida/stats/snapshot.h"
 
 namespace medida {
+namespace stats {
 
 const Clock::duration ExpDecaySample::kRESCALE_THRESHOLD = std::chrono::hours{1};
 
@@ -94,4 +95,5 @@ Snapshot ExpDecaySample::getSnapshot() const {
 
 }
 
+} // namespace stats
 } // namespace medida

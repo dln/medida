@@ -25,12 +25,12 @@ find_package(Threads REQUIRED)
 
 set(medida_SOURCES
   src/medida/counter.cc
-  src/medida/ewma.cc
-  src/medida/exp_decay_sample.cc
   src/medida/metric_name.cc
   src/medida/metrics_registry.cc
-  src/medida/snapshot.cc
-  src/medida/uniform_sample.cc
+  src/medida/stats/ewma.cc
+  src/medida/stats/exp_decay_sample.cc
+  src/medida/stats/snapshot.cc
+  src/medida/stats/uniform_sample.cc
 )
 
 set(medida_HEADERS

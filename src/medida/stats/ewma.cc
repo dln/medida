@@ -2,9 +2,10 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include "medida/ewma.h"
+#include "medida/stats/ewma.h"
 
 namespace medida {
+namespace stats {
 
   EWMA::EWMA(double alpha, std::chrono::nanoseconds interval)
       : initialized_ {false},
@@ -55,4 +56,6 @@ namespace medida {
   double EWMA::getRate(std::chrono::nanoseconds duration) const {
     return rate_ * duration.count();
   }
-}
+
+} // namespace stats
+} // namespace medida

@@ -2,11 +2,11 @@
 // Copyright (c) 2012 Daniel Lundin AB
 //
 
-#include "medida/snapshot.h"
+#include "medida/stats/snapshot.h"
 
 #include <gtest/gtest.h>
 
-using namespace medida;
+using namespace medida::stats;
 
 class SnapshotTest : public ::testing::Test {
 protected:

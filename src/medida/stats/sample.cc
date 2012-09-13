@@ -2,9 +2,10 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include "medida/sample.h"
+#include "medida/stats/sample.h"
 
 namespace medida {
+namespace stats {
 
   Sample::Sample() {
   }
@@ -12,4 +13,5 @@ namespace medida {
   Sample::~Sample() {
   }
 
-}
+} // namespace stats
+} // namespace medida

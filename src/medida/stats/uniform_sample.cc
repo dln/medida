@@ -2,14 +2,15 @@
 // Copyright (c) 2012 Daniel Lundin
 //
 
-#include "medida/uniform_sample.h"
+#include "medida/stats/uniform_sample.h"
 
 #include <algorithm>
 #include <random>
 
-#include "medida/snapshot.h"
+#include "medida/stats/snapshot.h"
 
 namespace medida {
+namespace stats {
 
 UniformSample::UniformSample(std::uint32_t reservoirSize)
     : count_  {1},
@@ -61,4 +62,5 @@ std::int64_t UniformSample::nextLong(std::int64_t n) const {
   return val;
 }
 
-}
+} // namespace stats
+} // namespace medida

@@ -13,9 +13,10 @@
 #include <random>
 #include <vector>
 
-#include "medida/sample.h"
+#include "medida/stats/sample.h"
 
 namespace medida {
+namespace stats {
 
 class UniformSample : public Sample {
 public:
@@ -33,6 +34,7 @@ protected:
     std::int64_t nextLong(std::int64_t n) const;
 };
 
+} // namespace stats
 } // namespace medida
 
 #endif // MEDIDA_UNIFORM_SAMPLE_H_
