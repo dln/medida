@@ -30,7 +30,7 @@ ExpDecaySample::~ExpDecaySample() {
 }
 
 void ExpDecaySample::Clear() {
-  std::lock_guard<std::mutex> lock {write_mutex_};
+  std::lock_guard<std::mutex> lock {mutex_};
   values_.clear();
   count_ = 0;
   startTime_ = Clock::now();
@@ -52,7 +52,7 @@ void ExpDecaySample::Update(std::int64_t value, Clock::time_point timestamp) {
       Rescale(timestamp);
     }
 
-    std::lock_guard<std::mutex> lock {read_mutex_};
+    std::lock_guard<std::mutex> lock {mutex_};
     auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(timestamp - startTime_);
     auto priority = std::exp(alpha_ * dur.count()) / dist_(rng_);
     auto count = ++count_;
@@ -72,7 +72,7 @@ void ExpDecaySample::Update(std::int64_t value, Clock::time_point timestamp) {
 
 
 void ExpDecaySample::Rescale(const Clock::time_point& when) {
-  std::lock_guard<std::mutex> lock {write_mutex_};
+  std::lock_guard<std::mutex> lock {mutex_};
   nextScaleTime_ = when + kRESCALE_THRESHOLD;
   auto oldStartTime = startTime_;
   startTime_ = when;

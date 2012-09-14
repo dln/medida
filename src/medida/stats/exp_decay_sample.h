@@ -37,9 +37,7 @@ protected:
 
   std::atomic<std::uint64_t> count_;
   std::map<double, std::int64_t> values_;
-  std::mutex values_mutex_;
-  std::mutex read_mutex_;
-  std::mutex write_mutex_;
+  std::mutex mutex_;
   mutable std::mt19937 rng_;
   std::uniform_real_distribution<> dist_;
   void Rescale(const Clock::time_point& when);
