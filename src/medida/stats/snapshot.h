@@ -29,7 +29,6 @@ public:
   double get99thPercentile() const;
   double get999thPercentile() const;
   std::vector<double> getValues() const;
-  // void dump(File output); 
 protected:
   void Init();
   std::vector<double> values_;

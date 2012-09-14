@@ -21,8 +21,8 @@ ExpDecaySample::ExpDecaySample(std::uint32_t reservoirSize, double alpha)
     : alpha_         {alpha},
       reservoirSize_ {reservoirSize},
       count_         {},
-      rng_ {},
-      dist_ (0, 1) {
+      rng_           {std::random_device()()},
+      dist_          (0, 1) {
   Clear();
 }
 
@@ -53,18 +53,17 @@ void ExpDecaySample::Update(std::int64_t value, Clock::time_point timestamp) {
     }
 
     std::lock_guard<std::mutex> lock {read_mutex_};
-    auto priority = std::exp(alpha_ * (timestamp - startTime_).count()) / dist_(rng_);
+    auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(timestamp - startTime_);
+    auto priority = std::exp(alpha_ * dur.count()) / dist_(rng_);
     auto count = ++count_;
 
     if (count <= reservoirSize_) {
       values_[priority] = value;
     } else {
       auto first = std::begin(values_)->first;
-      if (first < priority) {
-        if (values_.insert({priority, value}).second) {
-          while (values_.erase(first) == 0) {
-            first = std::begin(values_)->first;
-          }
+      if (first < priority && values_.insert({priority, value}).second) {
+        while (values_.erase(first) == 0) {
+          first = std::begin(values_)->first;
         }
       }
     }
@@ -91,7 +90,8 @@ void ExpDecaySample::Rescale(const Clock::time_point& when) {
   values_.clear();
 
   for (auto i = 0; i < size; i++) {
-    auto key = keys[i] * std::exp(-alpha_ * (when - oldStartTime).count());
+    auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(when - oldStartTime);
+    auto key = keys[i] * std::exp(-alpha_ * dur.count());
     values_[key] = values[i];
   }
 

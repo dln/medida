@@ -68,7 +68,7 @@ TEST(ExpDecaySampleTest, aHeavilyBiasedSampleOf100OutOf1000Elements) {
 
 
 TEST(ExpDecaySampleTest, longPeriodsOfInactivityShouldNotCorruptSamplingState) {
-  ExpDecaySample sample {10, 0.000015};
+  ExpDecaySample sample {10, 0.015};
   auto t = medida::Clock::now();
 
   for (auto i = 0; i < 1000; i++) {
