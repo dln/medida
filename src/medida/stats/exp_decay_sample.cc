@@ -98,15 +98,8 @@ void ExpDecaySample::Rescale(const Clock::time_point& when) {
   count_ = values_.size();
 }
 
-
 Snapshot ExpDecaySample::MakeSnapshot() const {
-  // FIXME: Avoid copying twice by creating Snapshot from [transform] iterator.
-  std::vector<std::int64_t> values;
-  values.reserve(values_.size());
-  for (auto& kv : values_) {
-    values.push_back(kv.second);
-  }
-  return {values};
+  return {values_};
 }
 
 } // namespace stats

@@ -12,8 +12,11 @@ TEST(ExpDecaySampleTest, aSampleOf100OutOf1000Elements) {
   ExpDecaySample sample {100, 0.99};
   EXPECT_EQ(0, sample.size());
 
+  auto t = medida::Clock::now();
+
   for (auto i = 0; i < 1000; i++) {
-    sample.Update(i);
+    sample.Update(i, t);
+    t += std::chrono::microseconds(1);
   }
   EXPECT_EQ(100, sample.size());
 

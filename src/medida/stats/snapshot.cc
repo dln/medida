@@ -15,17 +15,18 @@ namespace stats {
     Init();
   }
 
-  // FIXME: GCC 4.6 doesn't support constructor delegation.
-
-  Snapshot::Snapshot(const std::vector<double>& values) : values_ {std::begin(values), std::end(values)} {
+  template<typename T>
+  Snapshot::Snapshot(const std::vector<T>& values)
+      : values_ {std::begin(values), std::end(values)} {
     Init();
   }
 
-  Snapshot::Snapshot(const std::vector<std::int64_t>& values) : values_ {std::begin(values), std::end(values)} {
-    Init();
-  }
-
-  Snapshot::Snapshot(const std::vector<std::atomic<std::int64_t>>& values) : values_ {std::begin(values), std::end(values)} {
+  template<typename T>
+  Snapshot::Snapshot(const std::map<T, std::int64_t>& values) {
+    values_.reserve(values.size());
+    for (auto& kv : values) {
+      values_.push_back(kv.second);
+    }
     Init();
   }
 
@@ -92,6 +93,11 @@ namespace stats {
     return getValue(kP999_Q);
   }
 
+  // Explicit instantiations of template constructors
+  template Snapshot::Snapshot<double>(const std::vector<double>&);
+  template Snapshot::Snapshot<std::int64_t>(const std::vector<std::int64_t>&);
+  template Snapshot::Snapshot<std::atomic<std::int64_t>>(const std::vector<std::atomic<std::int64_t>>&);
+  template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
 
 } // namespace stats
 } // namespace medida

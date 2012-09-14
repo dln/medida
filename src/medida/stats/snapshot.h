@@ -8,6 +8,7 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <map>
 #include <vector>
 
 namespace medida {
@@ -16,9 +17,8 @@ namespace stats {
 class Snapshot {
 public:
   Snapshot();
-  Snapshot(const std::vector<double>& values);
-  Snapshot(const std::vector<std::int64_t>& values);
-  Snapshot(const std::vector<std::atomic<std::int64_t>>& values);
+  template<typename T> Snapshot(const std::vector<T>& values);
+  template<typename T> Snapshot(const std::map<T, std::int64_t>& values);
   ~Snapshot();
   std::size_t size() const;
   double getValue(double quantile) const;
