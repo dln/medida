@@ -16,8 +16,7 @@ namespace stats {
   }
 
   template<typename T>
-  Snapshot::Snapshot(const std::vector<T>& values)
-      : values_ {std::begin(values), std::end(values)} {
+  Snapshot::Snapshot(T begin, T end) : values_ {begin, end} {
     Init();
   }
 
@@ -94,9 +93,21 @@ namespace stats {
   }
 
   // Explicit instantiations of template constructors
-  template Snapshot::Snapshot<double>(const std::vector<double>&);
-  template Snapshot::Snapshot<std::int64_t>(const std::vector<std::int64_t>&);
-  template Snapshot::Snapshot<std::atomic<std::int64_t>>(const std::vector<std::atomic<std::int64_t>>&);
+  template Snapshot::Snapshot<std::vector<std::atomic<std::int64_t>>::const_iterator>(
+      std::vector<std::atomic<std::int64_t>>::const_iterator,
+      std::vector<std::atomic<std::int64_t>>::const_iterator
+  );
+
+  template Snapshot::Snapshot<std::vector<std::int64_t>::const_iterator>(
+      std::vector<std::int64_t>::const_iterator,
+      std::vector<std::int64_t>::const_iterator
+  );
+
+  template Snapshot::Snapshot<std::vector<double>::const_iterator>(
+      std::vector<double>::const_iterator,
+      std::vector<double>::const_iterator
+  );
+
   template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
 
 } // namespace stats

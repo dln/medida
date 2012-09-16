@@ -27,6 +27,7 @@ ExpDecaySample::ExpDecaySample(std::uint32_t reservoirSize, double alpha)
 }
 
 ExpDecaySample::~ExpDecaySample() {
+  DLOG(INFO) << "ExpDecaySample " << this << " destroyed";
 }
 
 void ExpDecaySample::Clear() {
@@ -99,6 +100,8 @@ void ExpDecaySample::Rescale(const Clock::time_point& when) {
 }
 
 Snapshot ExpDecaySample::MakeSnapshot() const {
+  // auto begin = std::begin(values_);
+  // auto end = begin + std::min(count_.load(), values_.size());
   return {values_};
 }
 

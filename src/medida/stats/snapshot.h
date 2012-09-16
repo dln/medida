@@ -17,7 +17,7 @@ namespace stats {
 class Snapshot {
 public:
   Snapshot();
-  template<typename T> Snapshot(const std::vector<T>& values);
+  template<typename T> Snapshot(T begin, T end);
   template<typename T> Snapshot(const std::map<T, std::int64_t>& values);
   ~Snapshot();
   std::size_t size() const;

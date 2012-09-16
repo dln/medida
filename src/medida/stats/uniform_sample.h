@@ -27,6 +27,7 @@ public:
   virtual void Update(std::int64_t value);
   virtual Snapshot MakeSnapshot() const;
 protected:
+    std::uint64_t reservoir_size_;
     std::atomic<std::uint64_t> count_;
     std::vector<std::atomic<std::int64_t>> values_;
     mutable std::mt19937_64 rng_;

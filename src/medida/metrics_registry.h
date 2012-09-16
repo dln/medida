@@ -12,6 +12,7 @@
 #include <string>
 
 #include "medida/counter.h"
+#include "medida/histogram.h"
 #include "medida/metric.h"
 #include "medida/metric_name.h"
 
@@ -22,6 +23,7 @@ public:
   MetricsRegistry();
   ~MetricsRegistry();
   Counter& NewCounter(const MetricName &name, std::int64_t init_value = 0);
+  Histogram& NewHistogram(const MetricName &name, Histogram::SampleType sample_type = Histogram::SampleType::kUniform);
 protected:
   std::map<MetricName, std::unique_ptr<Metric>> metrics_;
   mutable std::mutex mutex_;

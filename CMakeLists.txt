@@ -25,6 +25,7 @@ find_package(Threads REQUIRED)
 
 set(medida_SOURCES
   src/medida/counter.cc
+  src/medida/histogram.cc
   src/medida/metric_name.cc
   src/medida/metrics_registry.cc
   src/medida/stats/ewma.cc
@@ -36,14 +37,15 @@ set(medida_SOURCES
 set(medida_HEADERS
   src/medida/medida.h
   src/medida/counter.h
-  src/medida/ewma.h
-  src/medida/exp_decay_sample.h
+  src/medida/histogram.h
   src/medida/metric.h
   src/medida/metric_name.h
   src/medida/metrics_registry.h
-  src/medida/sample.h
-  src/medida/snapshot.h
-  src/medida/uniform_sample.h
+  src/medida/stats/ewma.h
+  src/medida/stats/exp_decay_sample.h
+  src/medida/stats/sample.h
+  src/medida/stats/snapshot.h
+  src/medida/stats/uniform_sample.h
 )
 
 include_directories(

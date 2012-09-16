@@ -15,14 +15,16 @@ namespace medida {
 namespace stats {
 
 UniformSample::UniformSample(std::uint32_t reservoirSize)
-    : count_     {},
-      values_    (reservoirSize), // FIXME: Explicit and non-uniform
-      rng_       {std::random_device()()},
-      rng_mutex_ {} {
+    : reservoir_size_ {reservoirSize},
+      count_          {},
+      values_         (reservoirSize), // FIXME: Explicit and non-uniform
+      rng_            {std::random_device()()},
+      rng_mutex_      {} {
   Clear();
 }
 
 UniformSample::~UniformSample() {
+  DLOG(INFO) << "UniformSample " << this << " destroyed";
 }
 
 void UniformSample::Clear() {
@@ -35,6 +37,8 @@ void UniformSample::Clear() {
 
 std::uint64_t UniformSample::size() const {
   std::uint64_t size = values_.size();
+  auto count = count_.load();
+  DLOG(INFO) << "UniformSample size=" << size << " count=" << count;
   return std::min(count_.load(), size);
 }
 
@@ -42,9 +46,9 @@ void UniformSample::Update(std::int64_t value) {
   auto count = ++count_;
   auto size = values_.size();
   if (count < size) {
-    values_[count] = value;
+    values_[count - 1] = value;
   } else {
-    std::uniform_int_distribution<> uniform(0, count);
+    std::uniform_int_distribution<> uniform(0, count - 1);
     std::lock_guard<std::mutex> lock {rng_mutex_}; // FIXME: Thread-local RNG?
     auto rand = uniform(rng_);
     if (rand < size) {
@@ -54,7 +58,9 @@ void UniformSample::Update(std::int64_t value) {
 }
 
 Snapshot UniformSample::MakeSnapshot() const {
-  return {values_};
+  auto begin = std::begin(values_);
+  auto end = begin + std::min(count_.load(), values_.size());
+  return {begin, end};
 }
 
 } // namespace stats
