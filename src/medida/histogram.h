@@ -33,9 +33,6 @@ public:
   void Process(const MetricProcessor& processor) const;
   void Clear();
 protected:
-  inline void set_max(std::int64_t potential_max);
-  inline void set_min(std::int64_t potential_min);
-  void UpdateVariance(std::int64_t value);
   static const std::uint64_t kDefaultSampleSize = 1028;
   static const std::uint64_t kDefaultAlpha = 0.015;
   std::unique_ptr<stats::Sample> sample_;
@@ -45,7 +42,7 @@ protected:
   std::atomic<std::uint64_t> count_;
   double variance_m_;
   double variance_s_;
-  std::mutex variance_mutex_;
+  mutable std::mutex variance_mutex_;
 };
 
 } // namespace medida

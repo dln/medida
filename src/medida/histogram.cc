@@ -44,17 +44,8 @@ void Histogram::Clear() {
   sample_->Clear();
 }
 
-void Histogram::Update(std::int64_t value) {
-  sample_->Update(value);
-  set_max(value);
-  set_min(value);
-  sum_ += value;
-  count_++;
-  UpdateVariance(value);
-}
-
 std::uint64_t Histogram::count() const {
-  return count_.load();
+  return count_;
 }
 
 double Histogram::sum() const {
@@ -62,28 +53,28 @@ double Histogram::sum() const {
 }
 
 double Histogram::max() const {
-  if (count() > 0) {
+  if (count_ > 0) {
     return max_.load();
   }
   return 0.0;
 }
 
 double Histogram::min() const {
-  if (count() > 0) {
+  if (count_ > 0) {
     return min_.load();
   }
   return 0.0;
 }
 
 double Histogram::mean() const {
-  if (count() > 0) {
-    return sum_ / (double)count();
+  if (count_ > 0) {
+    return sum_ / (double)count_;
   }
   return 0.0;
 }
 
 double Histogram::std_dev() const {
-  if (count() > 0) {
+  if (count_ > 0) {
     return std::sqrt(variance());
   }
   return 0.0;
@@ -91,53 +82,45 @@ double Histogram::std_dev() const {
 
 double Histogram::variance() const {
   auto c = count();
-  if (c <= 1) {
-    return 0.0;
-  }
-  return variance_s_ / (c - 1.0);
+  if (c > 1) {
+    std::lock_guard<std::mutex> lock {variance_mutex_};
+    return variance_s_ / (c - 1.0);
+  } 
+  return 0.0;
 }
 
 stats::Snapshot Histogram::GetSnapshot() const {
   return sample_->MakeSnapshot();
 }
 
-inline void Histogram::set_max(std::int64_t potential_max) {
+
+void Histogram::Update(std::int64_t value) {
+  sample_->Update(value);
   if (count_ > 0) {
     auto cur_max = max_.load();
-    auto done = false;
-    while (!done) {
-      done = cur_max >= potential_max || max_.compare_exchange_weak(cur_max, potential_max);
-    }
-  } else {
-    max_ = potential_max;
-  }
-  DLOG(INFO) << "Histogram::set_max: max=" << max_;
-}
-
-inline void Histogram::set_min(std::int64_t potential_min) {
-  if (count_ > 0) {
     auto cur_min = min_.load();
-    auto done = false;
-    while (!done) {
-      done = cur_min <= potential_min || min_.compare_exchange_weak(cur_min, potential_min);
+    while (cur_max < value && !max_.compare_exchange_weak(cur_max, value)) {
+      // Spin until max is updated
+    }
+    while(cur_min > value && !min_.compare_exchange_weak(cur_min, value)) {
+      // Spin until min is updated
     }
   } else {
-    min_ = potential_min;
+    max_ = value;
+    min_ = value;
   }
-  DLOG(INFO) << "Histogram::set_min: min=" << min_;
-}
-
-void Histogram::UpdateVariance(std::int64_t value) {
+  sum_ += value;
+  auto new_count = ++count_;
   std::lock_guard<std::mutex> lock {variance_mutex_};
   auto old_vm = variance_m_;
   auto old_vs = variance_s_;
-  auto c = count();
-  if (c == 1) {
-    variance_m_ = 1.0;
-  } else {
-    variance_m_ = old_vm + (value - old_vm) / c;
+  if (new_count > 1) {
+    variance_m_ = old_vm + (value - old_vm) / new_count;
     variance_s_ = old_vs + (value - old_vm) * (value - variance_m_);
+  } else {
+    variance_m_ = 1.0;
   }
 }
+
 
 } // namespace medida
