@@ -60,7 +60,7 @@ void UniformSample::Update(std::int64_t value) {
 Snapshot UniformSample::MakeSnapshot() const {
   auto begin = std::begin(values_);
   auto end = begin + std::min(count_.load(), values_.size());
-  return {begin, end};
+  return Snapshot {begin, end};
 }
 
 } // namespace stats

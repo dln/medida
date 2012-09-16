@@ -93,7 +93,6 @@ stats::Snapshot Histogram::GetSnapshot() const {
   return sample_->MakeSnapshot();
 }
 
-
 void Histogram::Update(std::int64_t value) {
   sample_->Update(value);
   if (count_ > 0) {
@@ -121,6 +120,5 @@ void Histogram::Update(std::int64_t value) {
     variance_m_ = 1.0;
   }
 }
-
 
 } // namespace medida
