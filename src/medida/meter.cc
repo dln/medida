@@ -10,7 +10,7 @@ namespace medida {
 
 const Clock::duration::rep Meter::kTickInterval = std::chrono::duration_cast<Clock::duration>(std::chrono::seconds(5)).count();
 
-Meter::Meter(std::string event_type, Clock::duration rate_unit) 
+Meter::Meter(std::string event_type, std::chrono::nanoseconds rate_unit) 
     : event_type_ {event_type},
       rate_unit_  {rate_unit},
       count_      {0},
@@ -54,10 +54,10 @@ double Meter::one_minute_rate() {
 }
 
 double Meter::mean_rate() {
-  auto c = count_.load();
+  double c = count_.load();
   if (c > 0) {
     std::chrono::nanoseconds elapsed = Clock::now() - start_time_;
-    return (c * rate_unit_.count()) / (double)elapsed.count();
+    return c * rate_unit_.count() / elapsed.count();
   }
   return 0.0;
 }

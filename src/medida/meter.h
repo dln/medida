@@ -20,7 +20,7 @@ namespace medida {
 
 class Meter : public MetricInterface, MeteredInterface {
 public:
-  Meter(std::string event_type, Clock::duration rate_unit = std::chrono::seconds(1));
+  Meter(std::string event_type, std::chrono::nanoseconds rate_unit = std::chrono::seconds(1));
   ~Meter();
   virtual std::chrono::nanoseconds rate_unit() const;
   virtual std::string event_type() const;

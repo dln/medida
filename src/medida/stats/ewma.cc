@@ -8,19 +8,19 @@ namespace medida {
 namespace stats {
 
   EWMA::EWMA(double alpha, std::chrono::nanoseconds interval)
-      : initialized_ {false},
-        rate_        {0.0},
-        uncounted_   {0},
-        alpha_       {alpha},
-        interval_    {interval} {
+      : initialized_    {false},
+        rate_           {0.0},
+        uncounted_      {0},
+        alpha_          {alpha},
+        interval_nanos_ {interval.count()} {
   }
 
   EWMA::EWMA(EWMA &&other) 
-      : initialized_ {other.initialized_},
-        rate_        {other.rate_},
-        uncounted_   {other.uncounted_.load()},
-        alpha_       {other.alpha_},
-        interval_    {other.interval_} {
+      : initialized_    {other.initialized_},
+        rate_           {other.rate_},
+        uncounted_      {other.uncounted_.load()},
+        alpha_          {other.alpha_},
+        interval_nanos_ {other.interval_nanos_} {
   }
 
   EWMA::~EWMA() {
@@ -44,7 +44,7 @@ namespace stats {
 
   void EWMA::tick() {
     double count = uncounted_.exchange(0);
-    auto instantRate = count / interval_.count();
+    auto instantRate = count / interval_nanos_;
     if (initialized_) {
       rate_ += (alpha_ * (instantRate - rate_));
     } else {

@@ -35,12 +35,11 @@ protected:
   static constexpr double kM1_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kONE_MINUTE);
   static constexpr double kM5_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIVE_MINUTES);
   static constexpr double kM15_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIFTEEN_MINUTES);
-
   volatile bool initialized_;
   volatile double rate_;
   std::atomic<std::int64_t> uncounted_;
   const double alpha_;
-  const std::chrono::nanoseconds interval_;
+  const std::uint64_t interval_nanos_;
 };
 
 } // namespace stats
