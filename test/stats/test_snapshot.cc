@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012 Daniel Lundin AB
+// Copyright (c) 2012 Daniel Lundin
 //
 
 #include "medida/stats/snapshot.h"
