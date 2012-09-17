@@ -5,16 +5,16 @@
 #ifndef MEDIDA_METRIC_PROCESSOR_H_
 #define MEDIDA_METRIC_PROCESSOR_H_
 
-#include "medida/metric.h"
+#include "medida/metric_interface.h"
 
 namespace medida {
 
-class Metric;
+class MetricInterface;
 
 class MetricProcessor {
 public:
   virtual ~MetricProcessor() = 0;
-  virtual void Process(const Metric& metric) const = 0;
+  virtual void Process(const MetricInterface& metric) const = 0;
 };
 
 } // namespace medida

@@ -15,9 +15,9 @@ namespace medida {
 
 Histogram::Histogram(SampleType sample_type) {
   DLOG(INFO) << "Histogram " << this << " created. sample_type=" << sample_type;
-  if (sample_type == SampleType::kUniform) {
+  if (sample_type == kUniform) {
     sample_ = std::unique_ptr<stats::Sample>(new stats::UniformSample(kDefaultSampleSize));
-  } else if (sample_type == SampleType::kBiased) {
+  } else if (sample_type == kBiased) {
     sample_ = std::unique_ptr<stats::Sample>(new stats::ExpDecaySample(kDefaultSampleSize, kDefaultAlpha));
   } else {
     throw std::invalid_argument("invalid sample_type=" + sample_type);

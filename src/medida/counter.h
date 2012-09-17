@@ -8,11 +8,11 @@
 #include <atomic>
 #include <cstdint>
 
-#include "medida/metric.h"
+#include "medida/metric_interface.h"
 
 namespace medida {
 
-class Counter : public Metric {
+class Counter : public MetricInterface {
 public:
   Counter(std::int64_t init = 0);
   ~Counter();

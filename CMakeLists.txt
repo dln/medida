@@ -38,9 +38,11 @@ set(medida_HEADERS
   src/medida/medida.h
   src/medida/counter.h
   src/medida/histogram.h
-  src/medida/metric.h
+  src/medida/metric_interface.h
   src/medida/metric_name.h
   src/medida/metrics_registry.h
+  src/medida/sampling_interface.h
+  src/medida/summarizable_interface.h
   src/medida/stats/ewma.h
   src/medida/stats/exp_decay_sample.h
   src/medida/stats/sample.h

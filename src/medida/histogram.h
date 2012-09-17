@@ -10,26 +10,26 @@
 #include <memory>
 #include <mutex>
 
-#include "medida/metric.h"
+#include "medida/metric_interface.h"
+#include "medida/sampling_interface.h"
+#include "medida/summarizable_interface.h"
 #include "medida/stats/sample.h"
-#include "medida/stats/snapshot.h"
 
 namespace medida {
 
-class Histogram : public Metric {
+class Histogram : public MetricInterface, SamplingInterface, SummarizableInterface {
 public:
-  enum SampleType { kUniform, kBiased };
-  Histogram(SampleType sample_type = SampleType::kUniform);
+  Histogram(SampleType sample_type = kUniform);
   ~Histogram();
+  virtual stats::Snapshot GetSnapshot() const;
+  virtual double sum() const;
+  virtual double max() const;
+  virtual double min() const;
+  virtual double mean() const;
+  virtual double std_dev() const;
   void Update(std::int64_t value);
   std::uint64_t count() const;
-  double sum() const;
-  double max() const;
-  double min() const;
-  double mean() const;
-  double std_dev() const;
   double variance() const;
-  stats::Snapshot GetSnapshot() const;
   void Process(const MetricProcessor& processor) const;
   void Clear();
 protected:

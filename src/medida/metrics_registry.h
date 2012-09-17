@@ -13,7 +13,7 @@
 
 #include "medida/counter.h"
 #include "medida/histogram.h"
-#include "medida/metric.h"
+#include "medida/metric_interface.h"
 #include "medida/metric_name.h"
 
 namespace medida {
@@ -23,9 +23,9 @@ public:
   MetricsRegistry();
   ~MetricsRegistry();
   Counter& NewCounter(const MetricName &name, std::int64_t init_value = 0);
-  Histogram& NewHistogram(const MetricName &name, Histogram::SampleType sample_type = Histogram::SampleType::kUniform);
+  Histogram& NewHistogram(const MetricName &name, SamplingInterface::SampleType sample_type = SamplingInterface::kUniform);
 protected:
-  std::map<MetricName, std::unique_ptr<Metric>> metrics_;
+  std::map<MetricName, std::unique_ptr<MetricInterface>> metrics_;
   mutable std::mutex mutex_;
 };
 
