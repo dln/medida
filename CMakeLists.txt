@@ -26,6 +26,7 @@ find_package(Threads REQUIRED)
 set(medida_SOURCES
   src/medida/counter.cc
   src/medida/histogram.cc
+  src/medida/meter.cc
   src/medida/metric_name.cc
   src/medida/metrics_registry.cc
   src/medida/stats/ewma.cc
@@ -38,6 +39,8 @@ set(medida_HEADERS
   src/medida/medida.h
   src/medida/counter.h
   src/medida/histogram.h
+  src/medida/meter.h
+  src/medida/metered_interface.h
   src/medida/metric_interface.h
   src/medida/metric_name.h
   src/medida/metrics_registry.h
