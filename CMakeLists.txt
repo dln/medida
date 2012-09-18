@@ -29,6 +29,8 @@ set(medida_SOURCES
   src/medida/meter.cc
   src/medida/metric_name.cc
   src/medida/metrics_registry.cc
+  src/medida/timer.cc
+  src/medida/timer_context.cc
   src/medida/stats/ewma.cc
   src/medida/stats/exp_decay_sample.cc
   src/medida/stats/snapshot.cc
@@ -46,6 +48,8 @@ set(medida_HEADERS
   src/medida/metrics_registry.h
   src/medida/sampling_interface.h
   src/medida/summarizable_interface.h
+  src/medida/timer.h
+  src/medida/timer_context.h
   src/medida/stats/ewma.h
   src/medida/stats/exp_decay_sample.h
   src/medida/stats/sample.h

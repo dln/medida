@@ -51,4 +51,18 @@ Meter& MetricsRegistry::NewMeter(const MetricName &name, std::string event_type,
   return dynamic_cast<Meter&>(*metrics_[name]);
 }
 
+Timer& MetricsRegistry::NewTimer(
+    const MetricName &name,
+    std::chrono::nanoseconds duration_unit,
+    std::chrono::nanoseconds rate_unit) {
+  std::lock_guard<std::mutex> lock {mutex_};
+  if (metrics_.find(name) == std::end(metrics_)) {
+    DLOG(INFO) << "NewTimer: " << name.ToString() << " does not exist. Creating.";
+    metrics_[name].reset(new Timer(duration_unit, rate_unit)); // GCC 4.6: Bug 44436 emplace* not implemented
+  } else {
+    DLOG(INFO) << "NewTimer: " << name.ToString() << " already exists.";
+  }
+  return dynamic_cast<Timer&>(*metrics_[name]);
+}
+
 } // namespace medida

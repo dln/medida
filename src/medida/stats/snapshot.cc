@@ -108,6 +108,11 @@ namespace stats {
       std::vector<double>::const_iterator
   );
 
+  template Snapshot::Snapshot<std::vector<double>::iterator>(
+      std::vector<double>::iterator,
+      std::vector<double>::iterator
+  );
+
   template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
 
 } // namespace stats

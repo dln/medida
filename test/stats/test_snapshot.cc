@@ -8,9 +8,10 @@
 
 using namespace medida::stats;
 
-class SnapshotTest : public ::testing::Test {
-protected:
-  SnapshotTest() : values {5, 1, 2, 3, 4}, snapshot {std::begin(values), std::end(values)} {
+struct SnapshotTest : public ::testing::Test {
+  SnapshotTest()
+      : values {5, 1, 2, 3, 4},
+        snapshot {std::begin(values), std::end(values)} {
   };
   const std::vector<double> values;
   const Snapshot snapshot;

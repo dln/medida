@@ -10,12 +10,6 @@
 
 using namespace medida;
 
-class HistogramTest : public ::testing::Test {
-protected:
-  HistogramTest() {
-  };
-};
-
 TEST(HistogramTest, anEmptyHistogram) {
   MetricsRegistry registry {};
   auto& histogram = registry.NewHistogram({"a", "b", "c"});

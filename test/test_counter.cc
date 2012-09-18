@@ -8,11 +8,7 @@
 
 using namespace medida;
 
-class CounterTest : public ::testing::Test {
-protected:
-  CounterTest() : counter {} {
-  };
-
+struct CounterTest : public ::testing::Test {
   Counter counter;
 };
 

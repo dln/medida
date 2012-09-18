@@ -8,11 +8,7 @@
 
 using namespace medida;
 
-class MetricsRegistryTest : public ::testing::Test {
-protected:
-  MetricsRegistryTest() {
-  };
-
+struct MetricsRegistryTest : public ::testing::Test {
   MetricsRegistry registry;
 };
 

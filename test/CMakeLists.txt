@@ -8,6 +8,7 @@ set(test_sources
   test_meter.cc
   test_metric_name.cc
   test_metrics_registry.cc
+  test_timer.cc
   stats/test_ewma.cc
   stats/test_exp_decay_sample.cc
   stats/test_snapshot.cc

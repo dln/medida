@@ -85,7 +85,7 @@ double Histogram::variance() const {
   if (c > 1) {
     std::lock_guard<std::mutex> lock {variance_mutex_};
     return variance_s_ / (c - 1.0);
-  } 
+  }
   return 0.0;
 }
 
@@ -117,7 +117,7 @@ void Histogram::Update(std::int64_t value) {
     variance_m_ = old_vm + (value - old_vm) / new_count;
     variance_s_ = old_vs + (value - old_vm) * (value - variance_m_);
   } else {
-    variance_m_ = 1.0;
+    variance_m_ = value;
   }
 }
 
