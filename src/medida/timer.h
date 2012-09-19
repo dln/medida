@@ -7,6 +7,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <functional>
 
 #include "medida/stats/ewma.h"
 #include "medida/histogram.h"
@@ -16,11 +17,9 @@
 #include "medida/metric_processor.h"
 #include "medida/sampling_interface.h"
 #include "medida/summarizable_interface.h"
-#include "medida/stats/sample.h"
+#include "medida/timer_context.h"
 
 namespace medida {
-
-class TimerContext;
 
 class Timer : public MetricInterface, MeteredInterface, SamplingInterface, SummarizableInterface {
 public:
@@ -44,7 +43,8 @@ public:
   std::chrono::nanoseconds duration_unit() const;
   void Clear();
   void Update(std::chrono::nanoseconds duration);
-  // TimerContext Time();
+  TimerContext TimeScope();
+  void Time(std::function<void()>);
 protected:
   const std::chrono::nanoseconds duration_unit_;
   const std::uint64_t duration_unit_nanos_;

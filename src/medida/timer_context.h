@@ -8,9 +8,11 @@
 #include <chrono>
 #include <cstdint>
 
-#include "medida/timer.h"
+#include "medida/types.h"
 
 namespace medida {
+
+class Timer;
 
 class TimerContext {
 public:

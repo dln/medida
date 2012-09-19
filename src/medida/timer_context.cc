@@ -4,6 +4,7 @@
 
 #include "medida/timer_context.h"
 
+#include "medida/timer.h"
 #include "medida/types.h"
 
 namespace medida {

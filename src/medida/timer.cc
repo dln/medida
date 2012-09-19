@@ -4,21 +4,19 @@
 
 #include "medida/timer.h"
 
-#include "glog/logging.h"
+#include "medida/timer_context.h"
 
 namespace medida {
 
 Timer::Timer(std::chrono::nanoseconds duration_unit, std::chrono::nanoseconds rate_unit) 
-    : duration_unit_ {duration_unit},
+    : duration_unit_       {duration_unit},
       duration_unit_nanos_ {duration_unit.count()},
-      rate_unit_     {rate_unit},
-      meter_         {"calls", rate_unit},
-      histogram_     {SamplingInterface::kBiased} {
-  DLOG(INFO) << "Timer " << this << " created";
+      rate_unit_           {rate_unit},
+      meter_               {"calls", rate_unit},
+      histogram_           {SamplingInterface::kBiased} {
 }
 
 Timer::~Timer() {
-  DLOG(INFO) << "Timer " << this << " destroyed";
 }
 
 std::chrono::nanoseconds Timer::duration_unit() const {
@@ -74,7 +72,6 @@ double Timer::mean_rate() {
 }
 
 void Timer::Process(const MetricProcessor& processor) const  {
-  DLOG(INFO) << "Processing Timer " << this;
   processor.Process(*this);
 }
 
@@ -98,6 +95,15 @@ stats::Snapshot Timer::GetSnapshot() const {
     converted.push_back(v / (double)duration_unit_nanos_);
   }
   return {std::begin(converted), std::end(converted)};
+}
+
+TimerContext Timer::TimeScope() {
+  return {*this};
+}
+
+void Timer::Time(std::function<void()> func) {
+  auto t = TimeScope();
+  func();
 }
 
 } // namespace medida
