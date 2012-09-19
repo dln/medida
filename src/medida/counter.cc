@@ -4,41 +4,44 @@
 
 #include "medida/counter.h"
 
-#include "glog/logging.h"
-
 namespace medida {
 
 Counter::Counter(std::int64_t init) : count_ {init} {
-  DLOG(INFO) << "Counter " << this << " created. init=" << init;
 }
+
 
 Counter::~Counter() {
-  DLOG(INFO) << "Counter " << this << " destroyed";
 }
 
+
 void Counter::Process(const MetricProcessor& processor) const  {
-  DLOG(INFO) << "Processing Counter " << this;
   processor.Process(*this);
 }
+
 
 std::int64_t Counter::count() const {
   return count_.load();
 }
 
+
 void Counter::set_count(std::int64_t n) {
   count_ = n;
 }
+
 
 void Counter::inc(std::int64_t n) {
   count_ += n;
 }
 
+
 void Counter::dec(std::int64_t n) {
   count_ -= n;
 }
 
+
 void Counter::clear() {
   set_count(0);
 }
+
 
 } // namespace medida

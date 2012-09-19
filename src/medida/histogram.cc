@@ -6,15 +6,12 @@
 
 #include <cmath>
 
-#include "glog/logging.h"
-
 #include "medida/stats/exp_decay_sample.h"
 #include "medida/stats/uniform_sample.h"
 
 namespace medida {
 
 Histogram::Histogram(SampleType sample_type) {
-  DLOG(INFO) << "Histogram " << this << " created. sample_type=" << sample_type;
   if (sample_type == kUniform) {
     sample_ = std::unique_ptr<stats::Sample>(new stats::UniformSample(kDefaultSampleSize));
   } else if (sample_type == kBiased) {
@@ -25,14 +22,15 @@ Histogram::Histogram(SampleType sample_type) {
   Clear();
 }
 
+
 Histogram::~Histogram() {
-  DLOG(INFO) << "Histogram " << this << " destroyed";
 }
 
+
 void Histogram::Process(const MetricProcessor& processor) const  {
-  DLOG(INFO) << "Processing Histogram " << this;
   processor.Process(*this);
 }
+
 
 void Histogram::Clear() {
   min_ = 0;
@@ -44,13 +42,16 @@ void Histogram::Clear() {
   sample_->Clear();
 }
 
+
 std::uint64_t Histogram::count() const {
   return count_;
 }
 
+
 double Histogram::sum() const {
   return sum_.load();
 }
+
 
 double Histogram::max() const {
   if (count_ > 0) {
@@ -59,12 +60,14 @@ double Histogram::max() const {
   return 0.0;
 }
 
+
 double Histogram::min() const {
   if (count_ > 0) {
     return min_.load();
   }
   return 0.0;
 }
+
 
 double Histogram::mean() const {
   if (count_ > 0) {
@@ -73,12 +76,14 @@ double Histogram::mean() const {
   return 0.0;
 }
 
+
 double Histogram::std_dev() const {
   if (count_ > 0) {
     return std::sqrt(variance());
   }
   return 0.0;
 }
+
 
 double Histogram::variance() const {
   auto c = count();
@@ -89,9 +94,11 @@ double Histogram::variance() const {
   return 0.0;
 }
 
+
 stats::Snapshot Histogram::GetSnapshot() const {
   return sample_->MakeSnapshot();
 }
+
 
 void Histogram::Update(std::int64_t value) {
   sample_->Update(value);
@@ -120,5 +127,6 @@ void Histogram::Update(std::int64_t value) {
     variance_m_ = value;
   }
 }
+
 
 } // namespace medida

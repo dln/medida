@@ -14,6 +14,7 @@ void elapseMinute(EWMA &ewma) {
   }
 }
 
+
 TEST(EWMATest, aOneMinuteEWMAWithAValueOfThree) {
   auto ewma = EWMA::oneMinuteEWMA();
   ewma.update(3);
@@ -50,6 +51,7 @@ TEST(EWMATest, aOneMinuteEWMAWithAValueOfThree) {
   elapseMinute(ewma);
   EXPECT_NEAR(0.00000018, ewma.getRate(), 1e-6);
 }
+
 
 TEST(EWMATest, aFiveMinuteEWMAWithAValueOfThree) {
   auto ewma = EWMA::fiveMinuteEWMA();
@@ -88,6 +90,7 @@ TEST(EWMATest, aFiveMinuteEWMAWithAValueOfThree) {
   EXPECT_NEAR(0.02987224, ewma.getRate(), 1e-6);
 }
 
+
 TEST(EWMATest, aFifteenMinuteEWMAWithAValueOfThree) {
   auto ewma = EWMA::fifteenMinuteEWMA();
   ewma.update(3);
@@ -124,6 +127,7 @@ TEST(EWMATest, aFifteenMinuteEWMAWithAValueOfThree) {
   elapseMinute(ewma);
   EXPECT_NEAR(0.22072766, ewma.getRate(), 1e-6);
 }
+
 
 TEST(EWMATest, rateDefaultDurationIsOneSecond) {
   auto ewma = EWMA::oneMinuteEWMA();

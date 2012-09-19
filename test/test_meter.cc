@@ -10,8 +10,8 @@
 
 #include "medida/metrics_registry.h"
 
-
 using namespace medida;
+
 
 TEST(MeterTest, aBlankMeter) {
   Meter meter {"things"};
@@ -20,6 +20,7 @@ TEST(MeterTest, aBlankMeter) {
   EXPECT_NEAR(0.0, meter.mean_rate(), 0.001);
 }
 
+
 TEST(MeterTest, createFromRegistry) {
   MetricsRegistry registry {};
   auto& meter = registry.NewMeter({"a", "b", "c"}, "things");
@@ -27,11 +28,13 @@ TEST(MeterTest, createFromRegistry) {
   EXPECT_EQ("things", meter.event_type());
 }
 
+
 TEST(MeterTest, aMeterWithThreeEvents) {
   Meter meter {"things"};
   meter.Mark(3);
   EXPECT_EQ(3, meter.count());
 }
+
 
 TEST(MeterTest, meterTiming) {
   Meter meter {"things"};

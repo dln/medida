@@ -8,14 +8,13 @@
 #include <cmath>
 #include <functional>
 
-#include "glog/logging.h"
-
 #include "medida/stats/snapshot.h"
 
 namespace medida {
 namespace stats {
 
 const Clock::duration ExpDecaySample::kRESCALE_THRESHOLD = std::chrono::hours{1};
+
 
 ExpDecaySample::ExpDecaySample(std::uint32_t reservoirSize, double alpha)
     : alpha_         {alpha},
@@ -26,9 +25,10 @@ ExpDecaySample::ExpDecaySample(std::uint32_t reservoirSize, double alpha)
   Clear();
 }
 
+
 ExpDecaySample::~ExpDecaySample() {
-  DLOG(INFO) << "ExpDecaySample " << this << " destroyed";
 }
+
 
 void ExpDecaySample::Clear() {
   std::lock_guard<std::mutex> lock {mutex_};
@@ -38,9 +38,11 @@ void ExpDecaySample::Clear() {
   nextScaleTime_ = startTime_ + kRESCALE_THRESHOLD;
 }
 
+
 std::uint64_t ExpDecaySample::size() const {
   return std::min(reservoirSize_, count_.load());
 }
+
 
 void ExpDecaySample::Update(std::int64_t value) {
   Update(value, Clock::now());
@@ -52,7 +54,6 @@ void ExpDecaySample::Update(std::int64_t value, Clock::time_point timestamp) {
     if (timestamp >= nextScaleTime_) {
       Rescale(timestamp);
     }
-
     std::lock_guard<std::mutex> lock {mutex_};
     auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(timestamp - startTime_);
     auto priority = std::exp(alpha_ * dur.count()) / dist_(rng_);
@@ -99,9 +100,8 @@ void ExpDecaySample::Rescale(const Clock::time_point& when) {
   count_ = values_.size();
 }
 
+
 Snapshot ExpDecaySample::MakeSnapshot() const {
-  // auto begin = std::begin(values_);
-  // auto end = begin + std::min(count_.load(), values_.size());
   return {values_};
 }
 

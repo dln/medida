@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <random>
 
-#include "glog/logging.h"
-
 #include "medida/stats/snapshot.h"
 
 namespace medida {
@@ -23,24 +21,25 @@ UniformSample::UniformSample(std::uint32_t reservoirSize)
   Clear();
 }
 
+
 UniformSample::~UniformSample() {
-  DLOG(INFO) << "UniformSample " << this << " destroyed";
 }
+
 
 void UniformSample::Clear() {
   for (auto& v : values_) {
     v = 0;
   }
   count_ = 0;
-  DLOG(INFO) << "UniformSample cleared";
 }
+
 
 std::uint64_t UniformSample::size() const {
   std::uint64_t size = values_.size();
   std::uint64_t count = count_.load();
-  DLOG(INFO) << "UniformSample size=" << size << " count=" << count;
   return std::min(count, size);
 }
+
 
 void UniformSample::Update(std::int64_t value) {
   auto count = ++count_;
@@ -57,12 +56,14 @@ void UniformSample::Update(std::int64_t value) {
   }
 }
 
+
 Snapshot UniformSample::MakeSnapshot() const {
   std::uint64_t size = values_.size();
   std::uint64_t count = count_.load();
   auto begin = std::begin(values_);
   return Snapshot {begin, begin + std::min(count, size)};
 }
+
 
 } // namespace stats
 } // namespace medida

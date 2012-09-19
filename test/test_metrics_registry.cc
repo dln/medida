@@ -12,6 +12,7 @@ struct MetricsRegistryTest : public ::testing::Test {
   MetricsRegistry registry;
 };
 
+
 TEST_F(MetricsRegistryTest, keysByName) {
   auto& abc = registry.NewCounter({"a", "b", "c"});
   auto& abc2 = registry.NewCounter({"a", "b", "c"});

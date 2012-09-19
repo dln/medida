@@ -11,109 +11,128 @@
 namespace medida {
 namespace stats {
 
-  Snapshot::Snapshot() {
-    Init();
+Snapshot::Snapshot() {
+  Init();
+}
+
+
+template<typename T>
+Snapshot::Snapshot(T begin, T end) : values_ {begin, end} {
+  Init();
+}
+
+
+template<typename T>
+Snapshot::Snapshot(const std::map<T, std::int64_t>& values) {
+  values_.reserve(values.size());
+  for (auto& kv : values) {
+    values_.push_back(kv.second);
+  }
+  Init();
+}
+
+
+Snapshot::~Snapshot() {
+}
+
+
+void Snapshot::Init() {
+  std::sort(std::begin(this->values_), std::end(this->values_));
+}
+
+
+std::size_t Snapshot::size() const {
+ return values_.size();
+}
+
+
+std::vector<double> Snapshot::getValues() const {
+  return values_;
+}
+
+
+double Snapshot::getValue(double quantile) const {
+  if (quantile < 0.0 || quantile > 1.0) {
+    throw std::invalid_argument("quantile is not in [0..1]");
   }
 
-  template<typename T>
-  Snapshot::Snapshot(T begin, T end) : values_ {begin, end} {
-    Init();
+  if (values_.empty()) {
+    return 0.0;
   }
 
-  template<typename T>
-  Snapshot::Snapshot(const std::map<T, std::int64_t>& values) {
-    values_.reserve(values.size());
-    for (auto& kv : values) {
-      values_.push_back(kv.second);
-    }
-    Init();
+  auto pos = quantile * (values_.size() + 1);
+
+  if (pos < 1) {
+    return values_.front();
   }
 
-  Snapshot::~Snapshot() {
+  if (pos >= values_.size()) {
+    return values_.back();
   }
 
-  void Snapshot::Init() {
-    std::sort(std::begin(this->values_), std::end(this->values_));
-  }
+  auto lower = values_[pos - 1];
+  auto upper = values_[pos];
+  return lower + (pos - std::floor(pos)) * (upper - lower);
+}
 
-  std::size_t Snapshot::size() const {
-   return values_.size();
-  }
 
-  std::vector<double> Snapshot::getValues() const {
-    return values_;
-  }
+double Snapshot::getMedian() const {
+  return getValue(kMEDIAN_Q);
+}
 
-  double Snapshot::getValue(double quantile) const {
-    if (quantile < 0.0 || quantile > 1.0) {
-      throw std::invalid_argument("quantile is not in [0..1]");
-    }
 
-    if (values_.empty()) {
-      return 0.0;
-    }
+double Snapshot::get75thPercentile() const {
+  return getValue(kP75_Q);
+}
 
-    auto pos = quantile * (values_.size() + 1);
 
-    if (pos < 1) {
-      return values_.front();
-    }
+double Snapshot::get95thPercentile() const {
+  return getValue(kP95_Q);
+}
 
-    if (pos >= values_.size()) {
-      return values_.back();
-    }
 
-    auto lower = values_[pos - 1];
-    auto upper = values_[pos];
-    return lower + (pos - std::floor(pos)) * (upper - lower);
-  }
+double Snapshot::get98thPercentile() const {
+  return getValue(kP98_Q);
+}
 
-  double Snapshot::getMedian() const {
-    return getValue(kMEDIAN_Q);
-  }
 
-  double Snapshot::get75thPercentile() const {
-    return getValue(kP75_Q);
-  }
+double Snapshot::get99thPercentile() const {
+  return getValue(kP99_Q);
+}
 
-  double Snapshot::get95thPercentile() const {
-    return getValue(kP95_Q);
-  }
 
-  double Snapshot::get98thPercentile() const {
-    return getValue(kP98_Q);
-  }
+double Snapshot::get999thPercentile() const {
+  return getValue(kP999_Q);
+}
 
-  double Snapshot::get99thPercentile() const {
-    return getValue(kP99_Q);
-  }
 
-  double Snapshot::get999thPercentile() const {
-    return getValue(kP999_Q);
-  }
+// Explicit instantiations of template constructors
+template Snapshot::Snapshot<std::vector<std::atomic<std::int64_t>>::const_iterator>(
+    std::vector<std::atomic<std::int64_t>>::const_iterator,
+    std::vector<std::atomic<std::int64_t>>::const_iterator
+);
 
-  // Explicit instantiations of template constructors
-  template Snapshot::Snapshot<std::vector<std::atomic<std::int64_t>>::const_iterator>(
-      std::vector<std::atomic<std::int64_t>>::const_iterator,
-      std::vector<std::atomic<std::int64_t>>::const_iterator
-  );
 
-  template Snapshot::Snapshot<std::vector<std::int64_t>::const_iterator>(
-      std::vector<std::int64_t>::const_iterator,
-      std::vector<std::int64_t>::const_iterator
-  );
+template Snapshot::Snapshot<std::vector<std::int64_t>::const_iterator>(
+    std::vector<std::int64_t>::const_iterator,
+    std::vector<std::int64_t>::const_iterator
+);
 
-  template Snapshot::Snapshot<std::vector<double>::const_iterator>(
-      std::vector<double>::const_iterator,
-      std::vector<double>::const_iterator
-  );
 
-  template Snapshot::Snapshot<std::vector<double>::iterator>(
-      std::vector<double>::iterator,
-      std::vector<double>::iterator
-  );
+template Snapshot::Snapshot<std::vector<double>::const_iterator>(
+    std::vector<double>::const_iterator,
+    std::vector<double>::const_iterator
+);
 
-  template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
+
+template Snapshot::Snapshot<std::vector<double>::iterator>(
+    std::vector<double>::iterator,
+    std::vector<double>::iterator
+);
+
+
+template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
+
 
 } // namespace stats
 } // namespace medida

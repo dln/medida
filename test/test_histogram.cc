@@ -50,5 +50,3 @@ TEST(HistogramTest, aHistogramWith1000Elements) {
   EXPECT_NEAR(990.99, snapshot.get99thPercentile(), 0.0001);
   EXPECT_EQ(1000, snapshot.size());
 }
-
-

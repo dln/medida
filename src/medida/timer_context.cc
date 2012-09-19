@@ -14,14 +14,17 @@ TimerContext::TimerContext(Timer& timer)
   Reset();
 }
 
+
 TimerContext::~TimerContext() {
   Stop();
 }
+
 
 void TimerContext::Reset() {
   start_time_ = Clock::now();
   active_ = true;
 }
+
 
 std::chrono::nanoseconds TimerContext::Stop() {
   if (active_) {

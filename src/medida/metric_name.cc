@@ -26,48 +26,60 @@ MetricName::MetricName(const std::string &domain, const std::string &type,
   }
 }
 
+
 MetricName::~MetricName() {
 
 }
+
 
 std::string MetricName::domain() const {
   return domain_;
 }
 
+
 std::string MetricName::type() const {
   return type_;
 }
+
 
 std::string MetricName::name() const {
   return name_;
 }
 
+
 std::string MetricName::scope() const {
   return scope_;
 }
+
 
 std::string MetricName::ToString() const {
   return repr_;
 }
 
+
 bool MetricName::has_scope() const {
   return !scope_.empty();
 }
+
 
 bool MetricName::operator==(const MetricName &other) const {
   return repr_ == other.repr_;
 }
 
+
 bool MetricName::operator!=(const MetricName &other) const {
   return repr_ != other.repr_;
 }
+
 
 bool MetricName::operator<(const MetricName& other) const {
   return repr_ < other.repr_;
 }
 
+
 bool MetricName::operator>(const MetricName& other) const {
   return repr_ > other.repr_;
 }
+
 
 } // name space medida

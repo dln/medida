@@ -4,11 +4,10 @@
 
 #include "medida/meter.h"
 
-#include "glog/logging.h"
-
 namespace medida {
 
 const Clock::duration::rep Meter::kTickInterval = std::chrono::duration_cast<Clock::duration>(std::chrono::seconds(5)).count();
+
 
 Meter::Meter(std::string event_type, std::chrono::nanoseconds rate_unit) 
     : event_type_ {event_type},
@@ -19,39 +18,45 @@ Meter::Meter(std::string event_type, std::chrono::nanoseconds rate_unit)
       m1_rate_    {stats::EWMA::oneMinuteEWMA()},
       m5_rate_    {stats::EWMA::fiveMinuteEWMA()},
       m15_rate_   {stats::EWMA::fifteenMinuteEWMA()} {
-  DLOG(INFO) << "Meter " << this << " created. event_type=" << event_type << " rate_unit=" << rate_unit.count();
 }
 
+
 Meter::~Meter() {
-  DLOG(INFO) << "Meter " << this << " destroyed";
 }
+
 
 std::chrono::nanoseconds Meter::rate_unit() const {
   return rate_unit_;
 }
 
+
 std::string Meter::event_type() const {
   return event_type_;
 }
 
+
 std::uint64_t Meter::count() const {
   return count_.load();
 }
+
 
 double Meter::fifteen_minute_rate() {
   TickIfNecessary();
   return m15_rate_.getRate();
 }
 
+
 double Meter::five_minute_rate() {
   TickIfNecessary();
   return m5_rate_.getRate();
 }
 
+
 double Meter::one_minute_rate() {
   TickIfNecessary();
   return m1_rate_.getRate();
 }
+
 
 double Meter::mean_rate() {
   double c = count_.load();
@@ -62,6 +67,7 @@ double Meter::mean_rate() {
   return 0.0;
 }
 
+
 void Meter::Mark(std::uint64_t n) {
   TickIfNecessary();
   count_ += n;
@@ -70,11 +76,13 @@ void Meter::Mark(std::uint64_t n) {
   m15_rate_.update(n);
 }
 
+
 void Meter::Tick() {
   m1_rate_.tick();
   m5_rate_.tick();
   m15_rate_.tick();
 }
+
 
 void Meter::TickIfNecessary() {
   auto old_tick = last_tick_.load();
@@ -89,8 +97,8 @@ void Meter::TickIfNecessary() {
   }
 }
 
+
 void Meter::Process(const MetricProcessor& processor) const  {
-  DLOG(INFO) << "Processing Meter " << this;
   processor.Process(*this);
 }
 

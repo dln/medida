@@ -27,6 +27,7 @@ TEST(UniformSampleTest, aSampleOf100OutOf1000Elements) {
   }
 }
 
+
 TEST(UniformSampleTest, clear) {
   UniformSample sample {100};
   for (auto i = 0; i < 10; i++) {
@@ -39,4 +40,3 @@ TEST(UniformSampleTest, clear) {
 
   EXPECT_EQ(0, sample.size());
 }
-
