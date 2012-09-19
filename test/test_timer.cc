@@ -79,30 +79,30 @@ TEST_F(TimerTest, timingVariantValues) {
 TEST_F(TimerTest, timerTimeScope) {
   {
     auto t = timer.TimeScope();
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
   {
     auto t = timer.TimeScope();
-    std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
   EXPECT_EQ(2, timer.count());
-  EXPECT_NEAR(15.0, timer.mean(), 0.1);
+  EXPECT_NEAR(150.0, timer.mean(), 0.5);
 }
 
 void my_func() {
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 TEST_F(TimerTest, timerTimeFunction) {
   timer.Time(my_func);
   EXPECT_EQ(1, timer.count());
-  EXPECT_NEAR(10.0, timer.mean(), 0.1);
+  EXPECT_NEAR(100.0, timer.mean(), 0.5);
 }
 
 TEST_F(TimerTest, timerTimeLambda) {
   timer.Time([]() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   });
   EXPECT_EQ(1, timer.count());
-  EXPECT_NEAR(10.0, timer.mean(), 0.1);
+  EXPECT_NEAR(100.0, timer.mean(), 0.5);
 }
