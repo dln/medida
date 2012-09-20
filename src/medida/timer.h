@@ -26,7 +26,7 @@ public:
   Timer(std::chrono::nanoseconds duration_unit = std::chrono::milliseconds(1),
       std::chrono::nanoseconds rate_unit = std::chrono::seconds(1));
   ~Timer();
-  void Process(const MetricProcessor& processor) const;
+  void Process(MetricProcessor& processor);
   virtual std::chrono::nanoseconds rate_unit() const;
   virtual std::string event_type() const;
   virtual std::uint64_t count() const;

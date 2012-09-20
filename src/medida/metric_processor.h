@@ -5,16 +5,22 @@
 #ifndef MEDIDA_METRIC_PROCESSOR_H_
 #define MEDIDA_METRIC_PROCESSOR_H_
 
-#include "medida/metric_interface.h"
-
 namespace medida {
 
+class Counter;
+class Histogram;
+class Meter;
 class MetricInterface;
+class Timer;
 
 class MetricProcessor {
 public:
-  virtual ~MetricProcessor() = 0;
-  virtual void Process(const MetricInterface& metric) const = 0;
+  virtual ~MetricProcessor() {};
+  virtual void Process(Counter& counter) {};
+  virtual void Process(Histogram& histogram) {};
+  virtual void Process(Meter& meter) {};
+  virtual void Process(Timer& timer) {};
+  virtual void Process(MetricInterface& metric) {};
 };
 
 } // namespace medida

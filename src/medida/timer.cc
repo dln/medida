@@ -86,7 +86,7 @@ double Timer::mean_rate() {
 }
 
 
-void Timer::Process(const MetricProcessor& processor) const  {
+void Timer::Process(MetricProcessor& processor) {
   processor.Process(*this);
 }
 

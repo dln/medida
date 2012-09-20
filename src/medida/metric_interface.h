@@ -12,7 +12,7 @@ namespace medida {
 class MetricInterface {
 public:
   virtual ~MetricInterface() {};
-  virtual void Process(const MetricProcessor& processor) const = 0;
+  virtual void Process(MetricProcessor& processor) = 0;
 };
 
 } // namespace medida

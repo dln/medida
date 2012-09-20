@@ -4,11 +4,14 @@
 
 #include "medida/metrics_registry.h"
 
+#include <algorithm>
+#include <thread>
+
 #include "medida/metric_name.h"
 
 namespace medida {
 
-MetricsRegistry::MetricsRegistry() : metrics_ {}, mutex_ {} {
+MetricsRegistry::MetricsRegistry() {
 }
 
 
@@ -44,10 +47,24 @@ MetricType& MetricsRegistry::NewMetric(const MetricName& name, Args... args) {
   std::lock_guard<std::mutex> lock {mutex_};
   if (metrics_.find(name) == std::end(metrics_)) {
     // GCC 4.6: Bug 44436 emplace* not implemented. Use ::reset instead.
-    metrics_[name].reset(new MetricType(args...));
+    // metrics_[name].reset(new MetricType(args...));
+    metrics_[name] = std::make_shared<MetricType>(args...);
   } else {
   }
   return dynamic_cast<MetricType&>(*metrics_[name]);
+}
+
+std::map<MetricName, std::shared_ptr<MetricInterface>> MetricsRegistry::GetAllMetrics() const {
+ return {metrics_}; 
+}
+
+void MetricsRegistry::ProcessAll(MetricProcessor& processor) {
+  std::lock_guard<std::mutex> lock (mutex_);
+  // std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  // auto it = std::begin(metrics_);
+  // auto end = std::end(metrics_);
+  // for (auto it = std::begin(metrics_); it != std::end(metrics_); it++ ) {
+  // }
 }
 
 

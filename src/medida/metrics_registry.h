@@ -16,6 +16,7 @@
 #include "medida/meter.h"
 #include "medida/metric_interface.h"
 #include "medida/metric_name.h"
+#include "medida/metric_processor.h"
 #include "medida/timer.h"
 
 namespace medida {
@@ -32,8 +33,10 @@ public:
   Timer& NewTimer(const MetricName &name,
       std::chrono::nanoseconds duration_unit = std::chrono::milliseconds(1),
       std::chrono::nanoseconds rate_unit = std::chrono::seconds(1));
+  std::map<MetricName, std::shared_ptr<MetricInterface>> GetAllMetrics() const;
+  void ProcessAll(MetricProcessor& processor);
 protected:
-  std::map<MetricName, std::unique_ptr<MetricInterface>> metrics_;
+  std::map<MetricName, std::shared_ptr<MetricInterface>> metrics_;
   mutable std::mutex mutex_;
   template<typename T, typename... Args> T& NewMetric(const MetricName& name, Args... args);
 };

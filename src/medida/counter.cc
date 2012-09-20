@@ -14,7 +14,7 @@ Counter::~Counter() {
 }
 
 
-void Counter::Process(const MetricProcessor& processor) const  {
+void Counter::Process(MetricProcessor& processor)  {
   processor.Process(*this);
 }
 

@@ -98,7 +98,7 @@ void Meter::TickIfNecessary() {
 }
 
 
-void Meter::Process(const MetricProcessor& processor) const  {
+void Meter::Process(MetricProcessor& processor) {
   processor.Process(*this);
 }
 

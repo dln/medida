@@ -30,7 +30,7 @@ public:
   virtual double one_minute_rate();
   virtual double mean_rate();
   void Mark(std::uint64_t n = 1);
-  void Process(const MetricProcessor& processor) const;
+  void Process(MetricProcessor& processor);
 protected:
   static const Clock::duration::rep kTickInterval;
   const std::string event_type_;

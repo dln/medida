@@ -27,7 +27,7 @@ Histogram::~Histogram() {
 }
 
 
-void Histogram::Process(const MetricProcessor& processor) const  {
+void Histogram::Process(MetricProcessor& processor) {
   processor.Process(*this);
 }
 

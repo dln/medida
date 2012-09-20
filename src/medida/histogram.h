@@ -30,7 +30,7 @@ public:
   void Update(std::int64_t value);
   std::uint64_t count() const;
   double variance() const;
-  void Process(const MetricProcessor& processor) const;
+  void Process(MetricProcessor& processor);
   void Clear();
 protected:
   static const std::uint64_t kDefaultSampleSize = 1028;

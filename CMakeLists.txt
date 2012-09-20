@@ -31,6 +31,9 @@ set(medida_SOURCES
   src/medida/metrics_registry.cc
   src/medida/timer.cc
   src/medida/timer_context.cc
+  src/medida/reporting/abstract_reporter.cc
+  src/medida/reporting/abstract_polling_reporter.cc
+  src/medida/reporting/console_reporter.cc
   src/medida/stats/ewma.cc
   src/medida/stats/exp_decay_sample.cc
   src/medida/stats/snapshot.cc
@@ -50,6 +53,9 @@ set(medida_HEADERS
   src/medida/summarizable_interface.h
   src/medida/timer.h
   src/medida/timer_context.h
+  src/medida/reporting/abstract_reporter.h
+  src/medida/reporting/abstract_polling_reporter.h
+  src/medida/reporting/console_reporter.h
   src/medida/stats/ewma.h
   src/medida/stats/exp_decay_sample.h
   src/medida/stats/sample.h
