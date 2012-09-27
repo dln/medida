@@ -57,7 +57,7 @@ void CollectdReporter::Run() {
     msgbuf_ptr_ = &msgbuf_[0];
 
     // Add message parts
-    AddPart(kTime, (std::uint64_t)std::time(0));
+    AddPart(kTime, std::time(0));
     AddPart(kHost, uname_);
     AddPart(kPlugin, name.domain() + "." + name.type());
     metric->Process(*this);
@@ -70,20 +70,21 @@ void CollectdReporter::Run() {
 
 
 void CollectdReporter::Process(Counter& counter) {
-  double value = counter.count();
+  double count = counter.count();
   AddPart(kType, "medida_counter");
   AddPart(kTypeInstance, current_instance_ + ".count");
-  AddValues({{kGauge, value}});
+  AddValues({{kGauge, count}});
 }
 
 
 void CollectdReporter::Process(Meter& meter) {
   auto event_type = meter.event_type();
   auto unit = FormatRateUnit(meter.rate_unit());
+  double count = meter.count();
   AddPart(kType, "medida_meter");
   AddPart(kTypeInstance, current_instance_ + "." + event_type +"_per_" + unit);
   AddValues({
-    {kGauge, (double)meter.count()},
+    {kGauge, count},
     {kGauge, meter.mean_rate()},
     {kGauge, meter.one_minute_rate()},
     {kGauge, meter.five_minute_rate()},
@@ -156,7 +157,7 @@ void CollectdReporter::AddValues(std::initializer_list<Value> values) {
   }
   for (auto& v : values) {
     if (v.type == DataType::kGauge) {
-      pack_double(v.value * 1.0);
+      pack_double(v.value);
     } else {
       pack64(v.value);
     }
@@ -168,6 +169,7 @@ void CollectdReporter::pack8(std::uint8_t data) {
   *msgbuf_ptr_ = data;
   move_ptr(1);
 }
+
 
 void CollectdReporter::pack16(std::uint16_t data) {
   *(std::uint16_t*)msgbuf_ptr_ = htobe16(data);
