@@ -114,5 +114,5 @@ TEST_F(TimerTest, timerTimeLambda) {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   });
   EXPECT_EQ(1, timer.count());
-  EXPECT_NEAR(100.0, timer.mean(), 0.5);
+  EXPECT_NEAR(100.0, timer.mean(), 1.0);
 }
