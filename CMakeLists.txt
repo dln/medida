@@ -23,6 +23,7 @@ endif()
 
 find_package(Threads REQUIRED)
 
+
 set(medida_SOURCES
   src/medida/counter.cc
   src/medida/histogram.cc
@@ -33,8 +34,10 @@ set(medida_SOURCES
   src/medida/timer_context.cc
   src/medida/reporting/abstract_reporter.cc
   src/medida/reporting/abstract_polling_reporter.cc
+  src/medida/reporting/collectd_reporter.cc
   src/medida/reporting/console_reporter.cc
   src/medida/reporting/json_reporter.cc
+  src/medida/reporting/util.cc
   src/medida/stats/ewma.cc
   src/medida/stats/exp_decay_sample.cc
   src/medida/stats/snapshot.cc
@@ -56,8 +59,10 @@ set(medida_HEADERS
   src/medida/timer_context.h
   src/medida/reporting/abstract_reporter.h
   src/medida/reporting/abstract_polling_reporter.h
+  src/medida/reporting/collectd_reporter.h
   src/medida/reporting/console_reporter.h
   src/medida/reporting/json_reporter.h
+  src/medida/reporting/util.h
   src/medida/stats/ewma.h
   src/medida/stats/exp_decay_sample.h
   src/medida/stats/sample.h

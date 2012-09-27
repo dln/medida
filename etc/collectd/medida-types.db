@@ -1,0 +1,4 @@
+medida_counter	count:GAUGE:0:U
+medida_meter		count:GAUGE:0:U, mean_rate:GAUGE:0:U, 1min_rate:GAUGE:0:U, 5min_rate:GAUGE:0:U, 15min_rate:GAUGE:0:U
+medida_histogram    min:GAUGE:0:U, max:GAUGE:0:U, mean:GAUGE:0:U, std_dev:GAUGE:0:U, median:GAUGE:0:U, 75pct:GAUGE:0:U, 95pct:GAUGE:0:U, 98pct:GAUGE:0:U, 99pct:GAUGE:0:U, 999pct:GAUGE:0:U
+medida_timer    min:GAUGE:0:U, max:GAUGE:0:U, mean:GAUGE:0:U, std_dev:GAUGE:0:U, median:GAUGE:0:U, 75pct:GAUGE:0:U, 95pct:GAUGE:0:U, 98pct:GAUGE:0:U, 99pct:GAUGE:0:U, 999pct:GAUGE:0:U

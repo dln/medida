@@ -19,7 +19,7 @@ public:
   AbstractPollingReporter(MetricsRegistry& registry);
   virtual ~AbstractPollingReporter();
   virtual void Shutdown();
-  virtual void Start(Clock::duration period);
+  virtual void Start(Clock::duration period = std::chrono::seconds(5));
   virtual void Run();
 protected:
   std::atomic<bool> running_;

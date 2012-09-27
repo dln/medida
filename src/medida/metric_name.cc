@@ -28,7 +28,6 @@ MetricName::MetricName(const std::string &domain, const std::string &type,
 
 
 MetricName::~MetricName() {
-
 }
 
 

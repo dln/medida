@@ -28,7 +28,6 @@ public:
   virtual void Process(Timer& timer);
   virtual std::string Report();
 protected:
-  std::string FormatRateUnit(const std::chrono::nanoseconds& rate_unit) const;
   mutable std::mutex mutex_;
   std::stringstream out_;
   std::string uname_;
