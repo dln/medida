@@ -2,10 +2,8 @@ language: cpp
 compiler:
   - gcc
 before_install:
-  # FIXME: google-glog was removed from precise, so install it from oneiric for now.
-  - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu oneiric universe"
   - sudo apt-get update -qq
-  - sudo apt-get install -qq cmake libgoogle-glog-dev
+  - sudo apt-get install -qq cmake
 before_script:
   cmake --config=Debug .
 script:

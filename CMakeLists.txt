@@ -82,7 +82,6 @@ add_library(medida SHARED
 
 target_link_libraries(medida
   ${CMAKE_THREAD_LIBS_INIT}
-  glog
 )
 
 set_target_properties(medida PROPERTIES
@@ -99,11 +98,40 @@ install(FILES ${medida_HEADERS}
   DESTINATION include/medida/
 )
 
+
+## pkgconfig
+
 set(PKGCONFIG_FILE ${medida_BINARY_DIR}/libmedida.pc)
-configure_file(libmedida.pc.cmake ${PKGCONFIG_FILE} @ONLY)
+configure_file(libmedida.pc.in ${PKGCONFIG_FILE} @ONLY)
 install(FILES ${PKGCONFIG_FILE}
   DESTINATION lib/pkgconfig
 )
 
+
+## Testing
+
 enable_testing()
 add_subdirectory(test)
+
+
+## Documentation
+
+option(BUILD_DOCS "Build HTML docs with Doxygen" OFF)
+if(BUILD_DOCS)
+  find_package(Doxygen)
+  if (NOT DOXYGEN_FOUND)
+    message(FATAL_ERROR "Doxygen not installed.")
+  endif()
+  configure_file(doc/doxygen.cfg.in
+    ${PROJECT_BINARY_DIR}/doxygen.cfg @ONLY IMMEDIATE
+  )
+  add_custom_target (docs ALL
+    COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/doxygen.cfg
+    SOURCES ${PROJECT_BINARY_DIR}/doxygen.cfg
+  )
+endif()
+
+install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html
+  DESTINATION share/doc/libmedida-dev/
+)
+
