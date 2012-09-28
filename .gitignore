@@ -13,9 +13,10 @@
 /debian/*.log
 /debian/*.substvars
 /debian/files
-/debian/medida/
-/debian/medida-dev/
-/debian/medida-dbg/
+/debian/libmedida-dbg/
+/debian/libmedida-dev/
+/debian/libmedida0-dbg/
+/debian/libmedida0/
 /debian/tmp/
 /dist/*
 /doc/*/*.html

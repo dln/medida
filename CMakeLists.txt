@@ -99,8 +99,8 @@ install(FILES ${medida_HEADERS}
   DESTINATION include/medida/
 )
 
-set(PKGCONFIG_FILE ${medida_BINARY_DIR}/medida.pc)
-configure_file(medida.pc.cmake ${PKGCONFIG_FILE} @ONLY)
+set(PKGCONFIG_FILE ${medida_BINARY_DIR}/libmedida.pc)
+configure_file(libmedida.pc.cmake ${PKGCONFIG_FILE} @ONLY)
 install(FILES ${PKGCONFIG_FILE}
   DESTINATION lib/pkgconfig
 )
