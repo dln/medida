@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 2.8.3)
 
-## Project Metadata
+
+## Metadata
 
 project (medida)
 set (medida_VERSION_MAJOR 0)
@@ -9,20 +10,21 @@ set (medida_VERSION_PATCH 0)
 set (medida_VERSION_TAG "")
 set (medida_VERSION "${medida_VERSION_MAJOR}.${medida_VERSION_MINOR}.${medida_VERSION_PATCH}${medida_VERSION_TAG}")
 
+
 ## Configuration
 
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++0x -Wall -Wno-long-long -Wno-deprecated -fno-strict-aliasing")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fno-diagnostics-show-option -std=c++0x -Wall -Wno-long-long -Wno-deprecated -fno-strict-aliasing")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   include(FindPkgConfig)
 endif()
 
-find_package(Threads REQUIRED)
 
+## Source
 
 set(medida_SOURCES
   src/medida/counter.cc
@@ -69,6 +71,10 @@ set(medida_HEADERS
   src/medida/stats/snapshot.h
   src/medida/stats/uniform_sample.h
 )
+
+## Dependencies
+
+find_package(Threads REQUIRED)
 
 include_directories(
   ${medida_SOURCE_DIR}/src
