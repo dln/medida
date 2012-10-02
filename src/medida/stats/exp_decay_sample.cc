@@ -102,7 +102,12 @@ void ExpDecaySample::Rescale(const Clock::time_point& when) {
 
 
 Snapshot ExpDecaySample::MakeSnapshot() const {
-  return {values_};
+  std::vector<double> vals;
+  vals.reserve(values_.size());
+  for (auto& kv : values_) {
+    vals.push_back(kv.second);
+  }
+  return {vals};
 }
 
 } // namespace stats

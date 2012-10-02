@@ -11,7 +11,7 @@ using namespace medida::stats;
 struct SnapshotTest : public ::testing::Test {
   SnapshotTest()
       : values {5, 1, 2, 3, 4},
-        snapshot {std::begin(values), std::end(values)} {
+        snapshot {values} {
   };
   const std::vector<double> values;
   const Snapshot snapshot;

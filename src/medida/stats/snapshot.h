@@ -16,9 +16,8 @@ namespace stats {
 
 class Snapshot {
 public:
-  Snapshot();
-  template<typename T> Snapshot(T begin, T end);
-  template<typename T> Snapshot(const std::map<T, std::int64_t>& values);
+  Snapshot() = delete;
+  Snapshot(const std::vector<double>& values);
   ~Snapshot();
   std::size_t size() const;
   double getValue(double quantile) const;
@@ -30,7 +29,6 @@ public:
   double get999thPercentile() const;
   std::vector<double> getValues() const;
 protected:
-  void Init();
   std::vector<double> values_;
   static constexpr double kMEDIAN_Q = 0.5;
   static constexpr double kP75_Q = 0.75;

@@ -112,7 +112,7 @@ stats::Snapshot Timer::GetSnapshot() const {
   for (auto& v : values) {
     converted.push_back(v / (double)duration_unit_nanos_);
   }
-  return {std::begin(converted), std::end(converted)};
+  return {converted};
 }
 
 

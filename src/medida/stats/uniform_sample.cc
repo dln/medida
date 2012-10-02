@@ -58,10 +58,8 @@ void UniformSample::Update(std::int64_t value) {
 
 
 Snapshot UniformSample::MakeSnapshot() const {
-  std::uint64_t size = values_.size();
-  std::uint64_t count = count_.load();
   auto begin = std::begin(values_);
-  return Snapshot {begin, begin + std::min(count, size)};
+  return {{begin, begin + std::min(count_.load(), values_.size())}};
 }
 
 

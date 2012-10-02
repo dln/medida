@@ -11,33 +11,13 @@
 namespace medida {
 namespace stats {
 
-Snapshot::Snapshot() {
-  Init();
-}
-
-
-template<typename T>
-Snapshot::Snapshot(T begin, T end) : values_ {begin, end} {
-  Init();
-}
-
-
-template<typename T>
-Snapshot::Snapshot(const std::map<T, std::int64_t>& values) {
-  values_.reserve(values.size());
-  for (auto& kv : values) {
-    values_.push_back(kv.second);
-  }
-  Init();
+Snapshot::Snapshot(const std::vector<double>& values)
+    : values_ {values} {
+  std::sort(std::begin(this->values_), std::end(this->values_));
 }
 
 
 Snapshot::~Snapshot() {
-}
-
-
-void Snapshot::Init() {
-  std::sort(std::begin(this->values_), std::end(this->values_));
 }
 
 
@@ -107,31 +87,33 @@ double Snapshot::get999thPercentile() const {
 
 
 // Explicit instantiations of template constructors
-template Snapshot::Snapshot<std::vector<std::atomic<std::int64_t>>::const_iterator>(
-    std::vector<std::atomic<std::int64_t>>::const_iterator,
-    std::vector<std::atomic<std::int64_t>>::const_iterator
-);
 
 
-template Snapshot::Snapshot<std::vector<std::int64_t>::const_iterator>(
-    std::vector<std::int64_t>::const_iterator,
-    std::vector<std::int64_t>::const_iterator
-);
+// template Snapshot::Snapshot<std::vector<std::atomic<std::int64_t>>::const_iterator>(
+//     std::vector<std::atomic<std::int64_t>>::const_iterator,
+//     std::vector<std::atomic<std::int64_t>>::const_iterator
+// );
 
 
-template Snapshot::Snapshot<std::vector<double>::const_iterator>(
-    std::vector<double>::const_iterator,
-    std::vector<double>::const_iterator
-);
+// template Snapshot::Snapshot<std::vector<std::int64_t>::const_iterator>(
+//     std::vector<std::int64_t>::const_iterator,
+//     std::vector<std::int64_t>::const_iterator
+// );
 
 
-template Snapshot::Snapshot<std::vector<double>::iterator>(
-    std::vector<double>::iterator,
-    std::vector<double>::iterator
-);
+// template Snapshot::Snapshot<std::vector<double>::const_iterator>(
+//     std::vector<double>::const_iterator,
+//     std::vector<double>::const_iterator
+// );
 
 
-template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
+// template Snapshot::Snapshot<std::vector<double>::iterator>(
+//     std::vector<double>::iterator,
+//     std::vector<double>::iterator
+// );
+
+
+// template Snapshot::Snapshot<double>(const std::map<double, std::int64_t>&);
 
 
 } // namespace stats
