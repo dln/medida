@@ -8,13 +8,31 @@
 #include <iostream>
 #include <limits>
 #include <sstream>
+#include <string>
 
 namespace medida {
 namespace reporting {
 
+class ConsoleReporter::Impl {
+ public:
+  Impl(ConsoleReporter& self, MetricsRegistry &registry, std::ostream& out = std::cerr);
+  ~Impl();
+  void Run();
+  void Process(Counter& counter);
+  void Process(Meter& meter);
+  void Process(Histogram& histogram);
+  void Process(Timer& timer);
+ private:
+  ConsoleReporter& self_;
+  medida::MetricsRegistry& registry_;
+  std::ostream& out_;
+  std::string FormatRateUnit(const std::chrono::nanoseconds& rate_unit) const;
+};
+
+
 ConsoleReporter::ConsoleReporter(MetricsRegistry &registry, std::ostream& out)
-    : AbstractPollingReporter(registry),
-      out_ (out) {
+    : AbstractPollingReporter(),
+      impl_ {new ConsoleReporter::Impl {*this, registry, out}} {
 }
 
 
@@ -23,22 +41,61 @@ ConsoleReporter::~ConsoleReporter() {
 
 
 void ConsoleReporter::Run() {
+  impl_->Run();
+}
+
+
+void ConsoleReporter::Process(Counter& counter) {
+  impl_->Process(counter);
+}
+
+
+void ConsoleReporter::Process(Meter& meter) {
+  impl_->Process(meter);
+}
+
+
+void ConsoleReporter::Process(Histogram& histogram) {
+  impl_->Process(histogram);
+}
+
+
+void ConsoleReporter::Process(Timer& timer) {
+  impl_->Process(timer);
+}
+
+
+// === Implementation ===
+
+
+ConsoleReporter::Impl::Impl(ConsoleReporter& self, MetricsRegistry &registry, std::ostream& out)
+    : self_     (self),
+      registry_ (registry),
+      out_      (out) {
+}
+
+
+ConsoleReporter::Impl::~Impl() {
+}
+
+
+void ConsoleReporter::Impl::Run() {
   for (auto& kv : registry_.GetAllMetrics()) {
     auto name = kv.first;
     auto metric = kv.second;
     out_ << name.ToString() << ":" << std::endl;
-    metric->Process(*this);
+    metric->Process(self_);
   }
   out_ << std::endl;
 }
 
 
-void ConsoleReporter::Process(Counter& counter) {
+void ConsoleReporter::Impl::Process(Counter& counter) {
   out_ << "  count = " << counter.count() << std::endl;
 }
 
 
-void ConsoleReporter::Process(Meter& meter) {
+void ConsoleReporter::Impl::Process(Meter& meter) {
   auto event_type = meter.event_type();
   auto unit = FormatRateUnit(meter.rate_unit());
   out_ << "           count = " << meter.count() << std::endl
@@ -49,7 +106,7 @@ void ConsoleReporter::Process(Meter& meter) {
 }
 
 
-void ConsoleReporter::Process(Histogram& histogram) {
+void ConsoleReporter::Impl::Process(Histogram& histogram) {
   auto snapshot = histogram.GetSnapshot();
   out_ << "             min = " << histogram.min() << std::endl
        << "             max = " << histogram.max() << std::endl
@@ -64,7 +121,7 @@ void ConsoleReporter::Process(Histogram& histogram) {
 }
 
 
-void ConsoleReporter::Process(Timer& timer) {
+void ConsoleReporter::Impl::Process(Timer& timer) {
   auto snapshot = timer.GetSnapshot();
   auto unit = FormatRateUnit(timer.duration_unit());
   out_ << "             min = " << timer.min() << unit << std::endl
@@ -80,7 +137,7 @@ void ConsoleReporter::Process(Timer& timer) {
 }
 
 
-std::string ConsoleReporter::FormatRateUnit(const std::chrono::nanoseconds& rate_unit) const {
+std::string ConsoleReporter::Impl::FormatRateUnit(const std::chrono::nanoseconds& rate_unit) const {
   static auto one_day = std::chrono::nanoseconds(std::chrono::hours(24)).count();
   static auto one_hour = std::chrono::nanoseconds(std::chrono::hours(1)).count();
   static auto one_minute = std::chrono::nanoseconds(std::chrono::minutes(1)).count();

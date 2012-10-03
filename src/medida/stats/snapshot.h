@@ -5,18 +5,14 @@
 #ifndef MEDIDA_METRICS_SNAPSHOT_H_
 #define MEDIDA_METRICS_SNAPSHOT_H_
 
-#include <atomic>
-#include <cstddef>
-#include <cstdint>
-#include <map>
+#include <memory>
 #include <vector>
 
 namespace medida {
 namespace stats {
 
 class Snapshot {
-public:
-  Snapshot() = delete;
+ public:
   Snapshot(const std::vector<double>& values);
   ~Snapshot();
   std::size_t size() const;
@@ -28,15 +24,12 @@ public:
   double get99thPercentile() const;
   double get999thPercentile() const;
   std::vector<double> getValues() const;
-protected:
-  std::vector<double> values_;
-  static constexpr double kMEDIAN_Q = 0.5;
-  static constexpr double kP75_Q = 0.75;
-  static constexpr double kP95_Q = 0.95;
-  static constexpr double kP98_Q = 0.98;
-  static constexpr double kP99_Q = 0.99;
-  static constexpr double kP999_Q = 0.999;
+ private:
+  class Impl;
+  Impl* impl_;
+  // std::unique_ptr<Impl> impl_;  // FIXME: y u incomplete type?!?
 };
+
 
 } // namespace stats
 } // namespace medida

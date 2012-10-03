@@ -17,7 +17,7 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fno-diagnostics-show-option -std=c++0x -Wall -Wno-long-long -Wno-deprecated -fno-strict-aliasing")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fno-diagnostics-show-option -std=c++0x -Wall -Wextra -pedantic -Wno-long-long -Wno-deprecated -fno-strict-aliasing")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   include(FindPkgConfig)
@@ -27,23 +27,23 @@ endif()
 ## Source
 
 set(medida_SOURCES
+  src/medida/stats/snapshot.cc
+  src/medida/stats/ewma.cc
+  src/medida/stats/uniform_sample.cc
+  src/medida/stats/exp_decay_sample.cc
   src/medida/counter.cc
-  src/medida/histogram.cc
   src/medida/meter.cc
   src/medida/metric_name.cc
+  src/medida/metric_processor.cc
   src/medida/metrics_registry.cc
   src/medida/timer.cc
   src/medida/timer_context.cc
-  src/medida/reporting/abstract_reporter.cc
   src/medida/reporting/abstract_polling_reporter.cc
   src/medida/reporting/collectd_reporter.cc
   src/medida/reporting/console_reporter.cc
   src/medida/reporting/json_reporter.cc
   src/medida/reporting/util.cc
-  src/medida/stats/ewma.cc
-  src/medida/stats/exp_decay_sample.cc
-  src/medida/stats/snapshot.cc
-  src/medida/stats/uniform_sample.cc
+  src/medida/histogram.cc
 )
 
 set(medida_HEADERS
@@ -59,7 +59,6 @@ set(medida_HEADERS
   src/medida/summarizable_interface.h
   src/medida/timer.h
   src/medida/timer_context.h
-  src/medida/reporting/abstract_reporter.h
   src/medida/reporting/abstract_polling_reporter.h
   src/medida/reporting/collectd_reporter.h
   src/medida/reporting/console_reporter.h

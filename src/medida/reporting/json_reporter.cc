@@ -6,6 +6,8 @@
 
 #include <chrono>
 #include <ctime>
+#include <mutex>
+#include <sstream>
 #include <sys/utsname.h>
 
 #include "medida/reporting/util.h"
@@ -13,11 +15,26 @@
 namespace medida {
 namespace reporting {
 
+class JsonReporter::Impl {
+ public:
+  Impl(JsonReporter& self, MetricsRegistry &registry);
+  ~Impl();
+  void Process(Counter& counter);
+  void Process(Meter& meter);
+  void Process(Histogram& histogram);
+  void Process(Timer& timer);
+  std::string Report();
+ private:
+  JsonReporter& self_;
+  medida::MetricsRegistry& registry_;
+  mutable std::mutex mutex_;
+  std::stringstream out_;
+  std::string uname_;
+};
+
+
 JsonReporter::JsonReporter(MetricsRegistry &registry)
-    : AbstractReporter(registry),
-      out_ {} {
-  utsname name;
-  uname_ = {uname(&name) ? "localhost" : name.nodename};
+    : impl_ {new JsonReporter::Impl {*this, registry}} {
 }
 
 
@@ -26,7 +43,46 @@ JsonReporter::~JsonReporter() {
 
 
 std::string JsonReporter::Report() {
-  auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(Clock::now().time_since_epoch()).count();
+  return impl_->Report();
+}
+
+
+void JsonReporter::Process(Counter& counter) {
+  impl_->Process(counter);
+}
+
+
+void JsonReporter::Process(Meter& meter) {
+  impl_->Process(meter);
+}
+
+
+void JsonReporter::Process(Histogram& histogram) {
+  impl_->Process(histogram);
+}
+
+
+void JsonReporter::Process(Timer& timer) {
+  impl_->Process(timer);
+}
+
+
+// === Implementation ===
+
+
+JsonReporter::Impl::Impl(JsonReporter& self, MetricsRegistry &registry)
+    : self_     (self),
+      registry_ (registry_) {
+  utsname name;
+  uname_ = {uname(&name) ? "localhost" : name.nodename};
+}
+
+
+JsonReporter::Impl::~Impl() {
+}
+
+
+std::string JsonReporter::Impl::Report() {
   auto t = std::time(NULL);
   char mbstr[32] = "";
   std::strftime(mbstr, 32, "%FT%T%z", std::localtime(&t));
@@ -47,7 +103,7 @@ std::string JsonReporter::Report() {
       out_ << ",";
     }
     out_ << "\"" << name.ToString() << "\":{" << std::endl;
-    metric->Process(*this);
+    metric->Process(self_);
     out_ << "}" << std::endl;
   }
   out_ << "}"    // metrics
@@ -56,13 +112,13 @@ std::string JsonReporter::Report() {
 }
 
 
-void JsonReporter::Process(Counter& counter) {
+void JsonReporter::Impl::Process(Counter& counter) {
   out_ << "\"type\":\"counter\"," << std::endl;
   out_ << "\"count\":" << counter.count() << std::endl;
 }
 
 
-void JsonReporter::Process(Meter& meter) {
+void JsonReporter::Impl::Process(Meter& meter) {
   auto event_type = meter.event_type();
   auto unit = FormatRateUnit(meter.rate_unit());
   out_ << "\"type\":\"meter\"," << std::endl
@@ -76,7 +132,7 @@ void JsonReporter::Process(Meter& meter) {
 }
 
 
-void JsonReporter::Process(Histogram& histogram) {
+void JsonReporter::Impl::Process(Histogram& histogram) {
   auto snapshot = histogram.GetSnapshot();
   out_ << "\"type\":\"histogram\"," << std::endl
        << "\"min\":" << histogram.min() << "," << std::endl
@@ -92,7 +148,7 @@ void JsonReporter::Process(Histogram& histogram) {
 }
 
 
-void JsonReporter::Process(Timer& timer) {
+void JsonReporter::Impl::Process(Timer& timer) {
   auto snapshot = timer.GetSnapshot();
   auto unit = FormatRateUnit(timer.duration_unit());
   out_ << "\"type\":\"timer\"," << std::endl

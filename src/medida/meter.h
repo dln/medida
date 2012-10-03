@@ -5,10 +5,9 @@
 #ifndef MEDIDA_METER_H_
 #define MEDIDA_METER_H_
 
-#include <atomic>
 #include <cstdint>
 #include <memory>
-#include <mutex>
+#include <string>
 
 #include "medida/stats/ewma.h"
 #include "medida/metered_interface.h"
@@ -19,7 +18,7 @@
 namespace medida {
 
 class Meter : public MetricInterface, MeteredInterface {
-public:
+ public:
   Meter(std::string event_type, std::chrono::nanoseconds rate_unit = std::chrono::seconds(1));
   ~Meter();
   virtual std::chrono::nanoseconds rate_unit() const;
@@ -31,18 +30,9 @@ public:
   virtual double mean_rate();
   void Mark(std::uint64_t n = 1);
   void Process(MetricProcessor& processor);
-protected:
-  static const Clock::duration::rep kTickInterval;
-  const std::string event_type_;
-  const std::chrono::nanoseconds rate_unit_;
-  std::atomic<std::uint64_t> count_;
-  const Clock::time_point start_time_;
-  std::atomic<std::uint64_t> last_tick_;
-  stats::EWMA m1_rate_;
-  stats::EWMA m5_rate_;
-  stats::EWMA m15_rate_;
-  void Tick();
-  void TickIfNecessary();
+ private:
+  class Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 } // namespace medida

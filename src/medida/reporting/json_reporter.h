@@ -5,21 +5,17 @@
 #ifndef MEDIDA_REPORTING_JSON_REPORTER_H_
 #define MEDIDA_REPORTING_JSON_REPORTER_H_
 
-#include <cstdint>
-#include <iostream>
-#include <mutex>
-#include <ostream>
+#include <memory>
 #include <string>
-#include <sstream>
 
 #include "medida/metric_processor.h"
-#include "medida/reporting/abstract_reporter.h"
+#include "medida/metrics_registry.h"
 
 namespace medida {
 namespace reporting {
 
-class JsonReporter : public AbstractReporter, MetricProcessor {
-public:
+class JsonReporter : public MetricProcessor {
+ public:
   JsonReporter(MetricsRegistry &registry);
   virtual ~JsonReporter();
   virtual void Process(Counter& counter);
@@ -27,10 +23,9 @@ public:
   virtual void Process(Histogram& histogram);
   virtual void Process(Timer& timer);
   virtual std::string Report();
-protected:
-  mutable std::mutex mutex_;
-  std::stringstream out_;
-  std::string uname_;
+ private:
+  class Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 

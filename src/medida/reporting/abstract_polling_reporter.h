@@ -5,26 +5,23 @@
 #ifndef MEDIDA_REPORTING_ABSTRACT_POLLING_REPORTER_H_
 #define MEDIDA_REPORTING_ABSTRACT_POLLING_REPORTER_H_
 
-#include <atomic>
-#include <thread>
+#include <memory>
 
-#include "medida/reporting/abstract_reporter.h"
 #include "medida/types.h"
 
 namespace medida {
 namespace reporting {
 
-class AbstractPollingReporter : public AbstractReporter {
-public:
-  AbstractPollingReporter(MetricsRegistry& registry);
+class AbstractPollingReporter {
+ public:
+  AbstractPollingReporter();
   virtual ~AbstractPollingReporter();
   virtual void Shutdown();
   virtual void Start(Clock::duration period = std::chrono::seconds(5));
   virtual void Run();
-protected:
-  std::atomic<bool> running_;
-  std::thread thread_;
-  void Loop(Clock::duration period);
+ private:
+  class Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 } // namespace reporting

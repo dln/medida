@@ -5,10 +5,8 @@
 #ifndef MEDIDA_HISTOGRAM_H_
 #define MEDIDA_HISTOGRAM_H_
 
-#include <atomic>
 #include <cstdint>
 #include <memory>
-#include <mutex>
 
 #include "medida/metric_interface.h"
 #include "medida/sampling_interface.h"
@@ -18,7 +16,7 @@
 namespace medida {
 
 class Histogram : public MetricInterface, SamplingInterface, SummarizableInterface {
-public:
+ public:
   Histogram(SampleType sample_type = kUniform);
   ~Histogram();
   virtual stats::Snapshot GetSnapshot() const;
@@ -32,17 +30,9 @@ public:
   double variance() const;
   void Process(MetricProcessor& processor);
   void Clear();
-protected:
-  static const std::uint64_t kDefaultSampleSize = 1028;
-  static const std::uint64_t kDefaultAlpha = 0.015;
-  std::unique_ptr<stats::Sample> sample_;
-  std::atomic<std::int64_t> min_;
-  std::atomic<std::int64_t> max_;
-  std::atomic<std::int64_t> sum_;
-  std::atomic<std::uint64_t> count_;
-  double variance_m_;
-  double variance_s_;
-  mutable std::mutex variance_mutex_;
+ private:
+  class Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 } // namespace medida

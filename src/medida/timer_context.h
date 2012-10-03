@@ -6,24 +6,22 @@
 #define MEDIDA_TIMER_CONTEXT_H_
 
 #include <chrono>
-#include <cstdint>
-
-#include "medida/types.h"
+#include <memory>
 
 namespace medida {
 
 class Timer;
 
 class TimerContext {
-public:
+ public:
   TimerContext(Timer& timer);
   ~TimerContext();
   void Reset();
   std::chrono::nanoseconds Stop();
-protected:
-  Clock::time_point start_time_;
-  Timer& timer_;
-  bool active_;
+ private:
+  class Impl;
+  Impl* impl_;
+  // std::unique_ptr<Impl> impl_;  // FIXME: y u incomplete type?!?
 };
 
 } // namespace medida

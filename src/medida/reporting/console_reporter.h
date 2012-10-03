@@ -5,19 +5,17 @@
 #ifndef MEDIDA_REPORTING_CONSOLE_REPORTER_H_
 #define MEDIDA_REPORTING_CONSOLE_REPORTER_H_
 
-#include <cstdint>
 #include <iostream>
-#include <ostream>
-#include <string>
 
 #include "medida/metric_processor.h"
+#include "medida/metrics_registry.h"
 #include "medida/reporting/abstract_polling_reporter.h"
 
 namespace medida {
 namespace reporting {
 
 class ConsoleReporter : public AbstractPollingReporter, MetricProcessor {
-public:
+ public:
   ConsoleReporter(MetricsRegistry &registry, std::ostream& out = std::cerr);
   virtual ~ConsoleReporter();
   virtual void Run();
@@ -25,9 +23,9 @@ public:
   virtual void Process(Meter& meter);
   virtual void Process(Histogram& histogram);
   virtual void Process(Timer& timer);
-protected:
-  std::ostream& out_;
-  std::string FormatRateUnit(const std::chrono::nanoseconds& rate_unit) const;
+ private:
+  class Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 

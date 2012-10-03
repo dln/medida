@@ -4,24 +4,45 @@
 
 #include "medida/stats/ewma.h"
 
+#include <atomic>
+#include <cmath>
+
 namespace medida {
 namespace stats {
 
+static constexpr int kINTERVAL = 5;
+static constexpr double kSECONDS_PER_MINUTE = 60.0;
+static constexpr int kONE_MINUTE = 1;
+static constexpr int kFIVE_MINUTES = 5;
+static constexpr int kFIFTEEN_MINUTES = 15;
+static constexpr double kM1_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kONE_MINUTE);
+static constexpr double kM5_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIVE_MINUTES);
+static constexpr double kM15_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIFTEEN_MINUTES);
+
+class EWMA::Impl {
+ public:
+  Impl(double alpha, std::chrono::nanoseconds interval);
+  Impl(Impl &other);
+  ~Impl();
+  void update(std::int64_t n);
+  void tick();
+  double getRate(std::chrono::nanoseconds duration = std::chrono::seconds {1}) const;
+ private:
+  volatile bool initialized_;
+  volatile double rate_;
+  std::atomic<std::int64_t> uncounted_;
+  const double alpha_;
+  const std::uint64_t interval_nanos_;
+};
+
+
 EWMA::EWMA(double alpha, std::chrono::nanoseconds interval)
-    : initialized_    {false},
-      rate_           {0.0},
-      uncounted_      {0},
-      alpha_          {alpha},
-      interval_nanos_ {interval.count()} {
+    : impl_ {new EWMA::Impl {alpha, interval}} {
 }
 
 
 EWMA::EWMA(EWMA &&other) 
-    : initialized_    {other.initialized_},
-      rate_           {other.rate_},
-      uncounted_      {other.uncounted_.load()},
-      alpha_          {other.alpha_},
-      interval_nanos_ {other.interval_nanos_} {
+    : impl_ {new EWMA::Impl{*other.impl_}} {
 }
 
 
@@ -45,11 +66,51 @@ EWMA EWMA::fifteenMinuteEWMA() {
 
 
 void EWMA::update(std::int64_t n) {
-  uncounted_ += n;
+  impl_->update(n);
 }
 
 
 void EWMA::tick() {
+  impl_->tick();
+}
+
+
+double EWMA::getRate(std::chrono::nanoseconds duration) const {
+  return impl_->getRate(duration);
+}
+
+
+// === Implementation ===
+
+
+EWMA::Impl::Impl(double alpha, std::chrono::nanoseconds interval)
+    : initialized_    {false},
+      rate_           {0.0},
+      uncounted_      {0},
+      alpha_          {alpha},
+      interval_nanos_ {interval.count()} {
+}
+
+
+EWMA::Impl::Impl(Impl &other)
+    : initialized_    {other.initialized_},
+      rate_           {other.rate_},
+      uncounted_      {other.uncounted_.load()},
+      alpha_          {other.alpha_},
+      interval_nanos_ {other.interval_nanos_} {
+}
+
+
+EWMA::Impl::~Impl() {
+}
+
+
+void EWMA::Impl::update(std::int64_t n) {
+  uncounted_ += n;
+}
+
+
+void EWMA::Impl::tick() {
   double count = uncounted_.exchange(0);
   auto instantRate = count / interval_nanos_;
   if (initialized_) {
@@ -61,7 +122,7 @@ void EWMA::tick() {
 }
 
 
-double EWMA::getRate(std::chrono::nanoseconds duration) const {
+double EWMA::Impl::getRate(std::chrono::nanoseconds duration) const {
   return rate_ * duration.count();
 }
 

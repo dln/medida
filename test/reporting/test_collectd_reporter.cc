@@ -4,6 +4,8 @@
 
 #include "medida/reporting/collectd_reporter.h"
 
+#include <thread>
+
 #include <gtest/gtest.h>
 
 #include "medida/metrics_registry.h"

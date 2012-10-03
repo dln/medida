@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <map>
 #include <memory>
-#include <mutex>
 #include <string>
 
 #include "medida/counter.h"
@@ -22,7 +21,7 @@
 namespace medida {
 
 class MetricsRegistry {
-public:
+ public:
   MetricsRegistry();
   ~MetricsRegistry();
   Counter& NewCounter(const MetricName &name, std::int64_t init_value = 0);
@@ -34,11 +33,9 @@ public:
       std::chrono::nanoseconds duration_unit = std::chrono::milliseconds(1),
       std::chrono::nanoseconds rate_unit = std::chrono::seconds(1));
   std::map<MetricName, std::shared_ptr<MetricInterface>> GetAllMetrics() const;
-  void ProcessAll(MetricProcessor& processor);
-protected:
-  std::map<MetricName, std::shared_ptr<MetricInterface>> metrics_;
-  mutable std::mutex mutex_;
-  template<typename T, typename... Args> T& NewMetric(const MetricName& name, Args... args);
+ private:
+  class Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 } // namespace medida

@@ -4,14 +4,112 @@
 
 #include "medida/histogram.h"
 
+#include <atomic>
 #include <cmath>
+#include <mutex>
 
 #include "medida/stats/exp_decay_sample.h"
 #include "medida/stats/uniform_sample.h"
 
 namespace medida {
 
-Histogram::Histogram(SampleType sample_type) {
+
+class Histogram::Impl {
+ public:
+  Impl(SampleType sample_type = kUniform);
+  ~Impl();
+  stats::Snapshot GetSnapshot() const;
+  double sum() const;
+  double max() const;
+  double min() const;
+  double mean() const;
+  double std_dev() const;
+  void Update(std::int64_t value);
+  std::uint64_t count() const;
+  double variance() const;
+  void Process(MetricProcessor& processor);
+  void Clear();
+ private:
+  static const std::uint64_t kDefaultSampleSize = 1028;
+  static const std::uint64_t kDefaultAlpha = 0.015;
+  std::unique_ptr<stats::Sample> sample_;
+  std::atomic<std::int64_t> min_;
+  std::atomic<std::int64_t> max_;
+  std::atomic<std::int64_t> sum_;
+  std::atomic<std::uint64_t> count_;
+  double variance_m_;
+  double variance_s_;
+  mutable std::mutex variance_mutex_;
+};
+
+
+
+Histogram::Histogram(SampleType sample_type)
+    : impl_ {new Histogram::Impl {sample_type}} {
+}
+
+
+Histogram::~Histogram() {
+}
+
+
+void Histogram::Process(MetricProcessor& processor) {
+  processor.Process(*this);  // FIXME: pimpl?
+}
+
+
+void Histogram::Clear() {
+  impl_->Clear();
+}
+
+
+std::uint64_t Histogram::count() const {
+  return impl_->count();
+}
+
+
+double Histogram::sum() const {
+  return impl_->sum();
+}
+
+
+double Histogram::max() const {
+  return impl_->max();
+}
+
+
+double Histogram::min() const {
+  return impl_->min();
+}
+
+
+double Histogram::mean() const {
+  return impl_->mean();
+}
+
+
+double Histogram::std_dev() const {
+  return impl_->std_dev();
+}
+
+
+void Histogram::Update(std::int64_t value) {
+  impl_->Update(value);
+}
+
+stats::Snapshot Histogram::GetSnapshot() const {
+  return impl_->GetSnapshot();
+}
+
+double Histogram::variance() const {
+  return impl_->variance();
+}
+
+
+// === Implementation ===
+
+
+Histogram::Impl::Impl(SampleType sample_type) {
   if (sample_type == kUniform) {
     sample_ = std::unique_ptr<stats::Sample>(new stats::UniformSample(kDefaultSampleSize));
   } else if (sample_type == kBiased) {
@@ -23,16 +121,11 @@ Histogram::Histogram(SampleType sample_type) {
 }
 
 
-Histogram::~Histogram() {
+Histogram::Impl::~Impl() {
 }
 
 
-void Histogram::Process(MetricProcessor& processor) {
-  processor.Process(*this);
-}
-
-
-void Histogram::Clear() {
+void Histogram::Impl::Clear() {
   min_ = 0;
   max_ = 0;
   sum_ = 0;
@@ -43,17 +136,17 @@ void Histogram::Clear() {
 }
 
 
-std::uint64_t Histogram::count() const {
+std::uint64_t Histogram::Impl::count() const {
   return count_;
 }
 
 
-double Histogram::sum() const {
+double Histogram::Impl::sum() const {
   return sum_.load();
 }
 
 
-double Histogram::max() const {
+double Histogram::Impl::max() const {
   if (count_ > 0) {
     return max_.load();
   }
@@ -61,7 +154,7 @@ double Histogram::max() const {
 }
 
 
-double Histogram::min() const {
+double Histogram::Impl::min() const {
   if (count_ > 0) {
     return min_.load();
   }
@@ -69,7 +162,7 @@ double Histogram::min() const {
 }
 
 
-double Histogram::mean() const {
+double Histogram::Impl::mean() const {
   if (count_ > 0) {
     return sum_ / (double)count_;
   }
@@ -77,7 +170,7 @@ double Histogram::mean() const {
 }
 
 
-double Histogram::std_dev() const {
+double Histogram::Impl::std_dev() const {
   if (count_ > 0) {
     return std::sqrt(variance());
   }
@@ -85,7 +178,7 @@ double Histogram::std_dev() const {
 }
 
 
-double Histogram::variance() const {
+double Histogram::Impl::variance() const {
   auto c = count();
   if (c > 1) {
     std::lock_guard<std::mutex> lock {variance_mutex_};
@@ -95,12 +188,12 @@ double Histogram::variance() const {
 }
 
 
-stats::Snapshot Histogram::GetSnapshot() const {
+stats::Snapshot Histogram::Impl::GetSnapshot() const {
   return sample_->MakeSnapshot();
 }
 
 
-void Histogram::Update(std::int64_t value) {
+void Histogram::Impl::Update(std::int64_t value) {
   sample_->Update(value);
   if (count_ > 0) {
     auto cur_max = max_.load();

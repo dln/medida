@@ -15,12 +15,12 @@ class Timer;
 
 class MetricProcessor {
 public:
-  virtual ~MetricProcessor() {};
-  virtual void Process(Counter& counter) {};
-  virtual void Process(Histogram& histogram) {};
-  virtual void Process(Meter& meter) {};
-  virtual void Process(Timer& timer) {};
-  virtual void Process(MetricInterface& metric) {};
+  virtual ~MetricProcessor();
+  virtual void Process(Counter& counter);
+  virtual void Process(Histogram& histogram);
+  virtual void Process(Meter& meter);
+  virtual void Process(Timer& timer);
+  virtual void Process(MetricInterface& metric);
 };
 
 } // namespace medida
