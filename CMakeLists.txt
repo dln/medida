@@ -136,7 +136,7 @@ if(BUILD_DOCS)
   )
 endif()
 
-install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html
+install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/
   DESTINATION share/doc/libmedida-dev/
 )
 
