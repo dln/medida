@@ -3,6 +3,8 @@ Medida - Simple metrics for C++ programs
 
 *NOTE: Work in progress and not for human consumption! Go away!*
 
+Project homepage and documentation: http://dln.github.com/medida/
+
 Created out of envy of Coda Hale's awesome Metrics library for the JVM.
 
 

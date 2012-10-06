@@ -12,6 +12,7 @@
 /debian/*.debhelper
 /debian/*.log
 /debian/*.substvars
+/debian/stamp-*
 /debian/files
 /debian/libmedida-dbg/
 /debian/libmedida-dev/
@@ -19,12 +20,12 @@
 /debian/libmedida0/
 /debian/tmp/
 /dist/*
-/doc/*/*.html
-/doc/_build
 /obj-*/
 /tags
 /target
 /test/CMakeFiles/*
 /test/test-medida
+/test/gtest-1.6.0/build-aux/config.guess.cdbs-orig
+/test/gtest-1.6.0/build-aux/config.sub.cdbs-orig
 CMakeCache.txt
 Makefile

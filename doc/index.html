@@ -7,6 +7,7 @@
     <meta name="description" content="Simple metrics for C++ programs">
     <meta name="author" content="Daniel Lundin">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/medida.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -35,46 +36,65 @@
         <div class="container">
           <a class="brand" href="#">Medida</a>
           <ul class="nav">
-            <li><a href="api/index.html">API Reference</a></li>
-            <li><a href="https://github.com/dln/medida/">Project</a></li>
-            <li><a href="https://github.com/dln/medida/issues">Issues</a></li>
+            <li><a href="api/index.html">API Docs</a></li>
+            <li><a href="https://github.com/dln/medida/issues">Bugs</a></li>
+            <li><a href="https://github.com/dln/medida/">GitHub</a></li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="container">
-      <div class="hero-unit">
+      <div id="header" class="hero-unit">
         <h1>Medida</h1>
         <p>A library to simply collect and report metrics in C++ programs.
           Heavily based on the excellent <a href="http://metrics.codahale.com/">Metrics</a> Java library.</p>
         <p><a class="btn btn-primary btn-large" href="api/index.html">API Docs &raquo;</a></p>
       </div>
 
-<!--
       <div class="row">
         <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2>Simple</h2>
+          <p>Medida is easy to get started with, the API small and concise.</p>
+          <p>Just drop it in, add some metrics, enjoy statistics using the built-in reporters:</p>
+          <ul>
+            <li><a href="http://collectd.org/">Collectd</a></li>
+            <li>JSON</li>
+            <li>Basic console reporting</li>
+          </ul>
+          <!-- <p><a class="btn" href="#">View Example &raquo;</a></p> -->
         </div>
         <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2>Flexible</h2>
+          <p>Supported metrics include:</p>
+          <ul>
+            <li>Counters</li>
+            <li>Histograms</li>
+            <li>Timers</li>
+            <li>Meters</li>
+          </ul>
+          <p>The core library and reporting plugins have no external dependencies.</p>
        </div>
         <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2>Open Source</h2>
+          <p>Medida is released under the <a href="http://github.com/dln/medida/blob/master/LICENSE">Apache License 2.0</a>.
+          <p>Patches and bug reports are most welcome to bring the project forward.</p>
+          <p><a class="btn" href="http://github.com/dln/medida/">Project on GitHub &raquo;</a></p>
         </div>
       </div>
--->
+
+
+      <div class="row">
+        <div class="span12">
+          <h2>Usage Example</h2>
+          <script src="http://gist.github.com/3844663.js?file=medida_example1.cc"></script>
+        </div>
+      </div>
 
       <hr>
 
       <footer>
-        <p>&copy; <a href="http://eintr.org">Daniel Lundin</a> 2012</p>
+        <p>&copy; Copyright 2012, <a href="http://eintr.org">Daniel Lundin</a></p>
       </footer>
 
     </div> <!-- /container -->

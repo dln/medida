@@ -127,9 +127,11 @@ if(BUILD_DOCS)
   if (NOT DOXYGEN_FOUND)
     message(FATAL_ERROR "Doxygen not installed.")
   endif()
+  file(COPY doc DESTINATION ${PROJECT_BINARY_DIR})
   configure_file(doc/doxygen.cfg.in
     ${PROJECT_BINARY_DIR}/doxygen.cfg @ONLY IMMEDIATE
   )
+
   add_custom_target (docs ALL
     COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/doxygen.cfg
     SOURCES ${PROJECT_BINARY_DIR}/doxygen.cfg
