@@ -1,0 +1,17 @@
+
+
+#navbar {
+  background: #000;
+  clear: both;
+  z-index: 0;
+}
+
+#navbar a {
+  color: #999;
+  text-decoration: None;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 200 !important;
+  line-height: 20px !important;
+  margin: 0 !important;
+}
