@@ -109,7 +109,7 @@ void UniformSample::Impl::Update(std::int64_t value) {
 
 Snapshot UniformSample::Impl::MakeSnapshot() const {
   auto begin = std::begin(values_);
-  return {{begin, begin + std::min(count_.load(), values_.size())}};
+  return Snapshot {{begin, begin + std::min(count_.load(), values_.size())}};
 }
 
 
