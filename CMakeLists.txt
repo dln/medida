@@ -54,6 +54,7 @@ set(medida_HEADERS
   src/medida/metered_interface.h
   src/medida/metric_interface.h
   src/medida/metric_name.h
+  src/medida/metric_processor.h
   src/medida/metrics_registry.h
   src/medida/sampling_interface.h
   src/medida/summarizable_interface.h
@@ -99,8 +100,40 @@ install(TARGETS medida
   LIBRARY DESTINATION lib
 )
 
-install(FILES ${medida_HEADERS}
+install(FILES
+  src/medida/medida.h
+  src/medida/counter.h
+  src/medida/histogram.h
+  src/medida/meter.h
+  src/medida/metered_interface.h
+  src/medida/metric_interface.h
+  src/medida/metric_name.h
+  src/medida/metric_processor.h
+  src/medida/metrics_registry.h
+  src/medida/sampling_interface.h
+  src/medida/summarizable_interface.h
+  src/medida/timer.h
+  src/medida/timer_context.h
+  src/medida/types.h
   DESTINATION include/medida/
+)
+
+install(FILES
+  src/medida/reporting/abstract_polling_reporter.h
+  src/medida/reporting/collectd_reporter.h
+  src/medida/reporting/console_reporter.h
+  src/medida/reporting/json_reporter.h
+  src/medida/reporting/util.h
+  DESTINATION include/medida/reporting/
+)
+
+install(FILES
+  src/medida/stats/ewma.h
+  src/medida/stats/exp_decay_sample.h
+  src/medida/stats/sample.h
+  src/medida/stats/snapshot.h
+  src/medida/stats/uniform_sample.h
+  DESTINATION include/medida/stats/
 )
 
 
