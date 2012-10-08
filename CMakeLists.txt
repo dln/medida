@@ -172,6 +172,16 @@ if(BUILD_DOCS)
 endif()
 
 install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/
-  DESTINATION share/doc/libmedida-dev/
+  DESTINATION share/doc/libmedida-dev/html/
+)
+
+
+## Examples
+
+add_subdirectory(examples)
+
+install(FILES
+  examples/medida_example1.cc
+  DESTINATION share/doc/libmedida-dev/examples/
 )
 
